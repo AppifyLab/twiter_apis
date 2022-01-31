@@ -37,11 +37,11 @@ return [
         'database' => [
             'driver' => 'database',
             'table' => 'jobs',
-            'queue' => 'laravel-facebook.conf',
+            'queue' => 'laravel-facebook',
             'retry_after' => 90,
             'after_commit' => false,
         ],
-
+        
         'beanstalkd' => [
             'driver' => 'beanstalkd',
             'host' => 'localhost',
