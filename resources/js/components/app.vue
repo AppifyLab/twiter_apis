@@ -165,38 +165,12 @@
                     <Icon type="ios-apps" />
                     <span class="submenu_text">Categories</span>
                 </MenuItem>
-                <MenuItem to="/subcategories" name="subcategories">
-                    <Icon type="ios-apps-outline" />
-                    <span class="submenu_text">Subcategories</span>
+                <MenuItem to="/twitter" name="twitter">
+                    <Icon type="ios-apps" />
+                    <span class="submenu_text">Twitter posts</span>
                 </MenuItem>
-                <MenuItem to="/sub-subcategories" name="sub-subcategories">
-                    <Icon type="md-apps" />
-                    <span class="submenu_text">Sub-subcategories</span>
-                </MenuItem>
-                <MenuItem to="/information" name="information">
-                    <Icon type="ios-information-circle-outline" />
-                    <span class="submenu_text">Info Page</span>
-                </MenuItem>
-                <!-- <MenuItem to="/messenger" name="messenger">
-                  <Icon type="ios-mail" />
-                  <span class="submenu_text">Messenger</span>
-                </MenuItem>
-                <MenuItem to="/profile" name="profile">
-                  <Icon type="md-person" />
-                  <span class="submenu_text">Profile</span>
-                </MenuItem>
-                <Submenu name="5">
-                  <template slot="title">
-                    <Icon type="md-aperture" />
-                    <span class="submenu_text">Aperture</span>
-                  </template>
-                  <MenuItem name="5-1"><Icon type="ios-paper" /><span class="menu_item_text">Toast</span></MenuItem>
-                  <MenuItem name="5-2"><Icon type="md-paper" /><span class="menu_item_text">Sweet alert</span></MenuItem>
-                </Submenu>
-                <MenuItem name="6">
-                  <Icon type="ios-notifications" />
-                  <span class="submenu_text">Notifications</span>
-                </MenuItem> -->
+             
+             
               </MenuGroup>
 
               <!-- <MenuGroup title="App">
@@ -263,8 +237,8 @@
       <div :class="[(sidebar? '_main_layout _mini_main_layout':'_main_layout') , ($route.path  != '/login' && $route.path  != '/register' && $route.path  != '/resetPassword' && $route.path  != '/forgetPassword'? '':'_login_layout')]">
         <router-view></router-view>
 
-        <!-- <Footer v-if="$route.path != '/login' && $route.path != '/register' && $route.path != '/resetPassword' && $route.path != '/forgetPassword' && $route.path  != '/messenger'"/> -->
       </div>
+      
     </div>
   </div>
 </template>

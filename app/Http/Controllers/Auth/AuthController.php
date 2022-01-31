@@ -8,16 +8,24 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Image;
 use File;
-// use Laravel\Socialite\Facades\Socialite;
+use Facebook\Facebook;
+use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
+
+
+
+
+
 
     private $authService;
     public function __construct(AuthService $authService)
     {
         $this->authService = $authService;
     }
+
+
     public function makeimage()  
     {  
         $file = Input::file('/img/avater.png');
@@ -72,14 +80,12 @@ class AuthController extends Controller
             imagepng($img,$save,0,NULL); 
             imagedestroy($img);
 
-
-            // imagedestroy($jpg_image);
           
 }
 
 
 
-public function test (){
+        public function test (){
         header('Content-type: image/png');
 
             // Create the image
@@ -151,6 +157,12 @@ public function test (){
 
         return $this->authService->login($data);
     }
+    public function register(Request $request){
+        $data = $request->all();
+        return $this->authService->register($data);
+    }
+
+    
 
     public function logout(){
          Auth::logout();

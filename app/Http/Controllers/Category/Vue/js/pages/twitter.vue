@@ -20,22 +20,13 @@
 
 							</div>
 					
-							<addCategory :category="twitterData"/>
 						
 
 						</div>
 						<div class="_table_responsive">
 							<Table class="" border :columns="columns1" :data="twitterData.data">
-									<template slot-scope="{row}" slot="username">
-										<p>{{row.username}}</p>
-									</template>
-									<template slot-scope="{row, index }" slot="action">
-                                        <p>
-											<!--create-modal-start-->
-											<editCategory :category="row"/>
-											<!--create-modal-end-->
-										    <Button type="error" size="small" @click="deleteCategory(row, index)">Delete</Button>
-                                        </p>
+									<template slot-scope="{row}" slot="text">
+										<p>{{row.text}}</p>
 									</template>
 							</Table>
 						</div>
@@ -53,15 +44,9 @@
 <script>
 
 import _ from 'lodash';
-import addCategory from '../../../../Category/Vue/js/components/category/addCategory'
-import editCategory from '../../../../Category/Vue/js/components/category/editCategory'
 
 export default {
 
-	components: {
-		addCategory,
-		editCategory
-	},
 	data () {
 		return {
             twitterData:[],
@@ -86,22 +71,16 @@ export default {
                     }
                 },
 				{
-					title: 'User name',
-					slot: 'username',
-					width:400,
+					title: 'content',
+					slot: 'text',
+					width:1000,
 				},
-				// {
-				// 	title: 'Date',
-                //     align: 'center',
-				// 	width:160,
-				// 	slot: 'date'
-				// },
-				{
-					title: 'Action',
-                    minWidth: 350,
-                    align: 'center',
-					slot: 'action',
-				},
+                // {
+				// 	title: 'Insert time',
+				// 	key: 'created_at',
+				// 	width:400,
+				// }
+			
 
 			]
 		}
@@ -109,7 +88,7 @@ export default {
 
 	methods: {
 	async alltwitterData(){
-		const res = await this.callApi('get', `/category/getAlltwitterData?page=${this.page}&perPage=${this.perPage}&str=${this.str}`)
+		const res = await this.callApi('get', `/category/getAllTwitterPostList?page=${this.page}&perPage=${this.perPage}&str=${this.str}`)
 			if(res.status==200){
 				this.twitterData = res.data;
 			}

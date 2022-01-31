@@ -114,9 +114,14 @@ class CategoryService
     public function deleteCategory($data){
         return $this->categoryQuery->deleteCategory($data);
     }
-    public function getAllCategories($data){
-        return $this->categoryQuery->getAllCategories($data);
+    public function getAlltwitterData($data){
+        return $this->categoryQuery->getAlltwitterData($data);
     }
+    public function getAllTwitterPostList($data){
+        return $this->categoryQuery->getAllTwitterPostList($data);
+    }
+
+    
 
     //================================ Category-End ========================================
 

@@ -8,15 +8,15 @@
 			  <Form>
 					<div class="row">
 						<div class="col-12 col-md-12 col-lg-12">
-							<FormItem :error="error.cat_name">
-								<Input v-model="form.cat_name" @keyup.native="error.cat_name=''" size="large" type="text" placeholder="Category name"/>
+							<FormItem :error="error.username">
+								<Input v-model="form.username" @keyup.native="error.username=''" size="large" type="text" placeholder="Twitter account name"/>
 							</FormItem>
 						</div>
 					</div>
 				</Form>
 			</div>
 			 <div slot="footer">
-				<Button @click="editCategory" :loading="isLoading" :disabled="isLoading" icon="md-add" type="primary" >{{ isLoading ? 'Please wait . . .' : 'Edit Category'}}</Button>
+				<Button @click="editCategory" :loading="isLoading" :disabled="isLoading" icon="md-add" type="primary" >{{ isLoading ? 'Please wait . . .' : 'Edit Twitter Account'}}</Button>
 				<Button type="error" icon ="md-close" @click="editModal = false">Cancel</Button>
 			</div>
 		</Modal>
@@ -32,11 +32,11 @@ export default {
 			isLoading:false,
 			form:{
                 cat_id:'',
-				cat_name:''
+				username:''
 			},
 
 			error:{
-				cat_name:''
+				username:''
 			},
 
 
@@ -49,8 +49,8 @@ export default {
 			this.clearDataError();
 
 			let flag = 1
-			if(!this.form.cat_name  || this.form.cat_name.trim()=='' || this.form.cat_name==null){
-				this.error.cat_name ='Category name is required!'
+			if(!this.form.username  || this.form.username.trim()=='' || this.form.username==null){
+				this.error.username ='Twitter user  name is required!'
 				flag = 0
 			}
 
@@ -62,24 +62,24 @@ export default {
 
 			if(res.status==200 || res.status==201){
 				this.editModal=false
-				this.s("Category updated successfully!");
-				this.category.cat_name = this.form.cat_name;
+				this.s("Twitter user  updated successfully!");
+				this.category.username = this.form.username;
             }
 			    this.isLoading = false;
 		},
 		clearDataError() {
 			this.error = {
-				cat_name:''
+				username:''
 		   }
     	},
 		clearData() {
 			this.form = {
-				cat_name:''
+				username:''
 			}
 		},
 		 editModalfunc(){
 			this.form.cat_id = this.category.id;
-			this.form.cat_name = this.category.cat_name;
+			this.form.username = this.category.username;
 			this.editModal =true;
 		 },
 

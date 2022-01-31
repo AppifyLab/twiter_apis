@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSubcategoriesTable extends Migration
+class CreateTwittersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,13 @@ class CreateSubcategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('subcategories', function (Blueprint $table) {
+        Schema::create('twitters', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('category_id');
-            $table->string('subcat_name', 199);
+            $table->longText('text');
+            $table->string('create_time', 199);
+            $table->string('twitter_id', 199);
+            $table->integer('like');
+            $table->integer('is_published')->default(0);
             $table->timestamps();
         });
     }
@@ -28,6 +31,6 @@ class CreateSubcategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('subcategories');
+        Schema::dropIfExists('twitters');
     }
 }

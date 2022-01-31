@@ -10,7 +10,7 @@ class Category extends Model
     use HasFactory;
 
     protected $fillable = [
-        'cat_name'
+        'username'
     ];
 
     protected $hidden = ['pivot'];

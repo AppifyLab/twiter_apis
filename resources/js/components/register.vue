@@ -1,36 +1,27 @@
 <template>
     <div>
         <div class="_login">
-            <div class="_login_left" style="display:none;">
-                <div class="_login_overlay"></div>
-
-                <div class="authentic_nav_logo">
-                    <a href="" class="authentic_nav_logo_a">
-                        <!-- <img src="/static/img/logo-icon.png" alt="" title="" class="_navbar_logo_img">
-                        <img src="/static/img/logo-text.png" alt="" title="" class="_navbar_logo_img_text"> -->
-                    </a>
-                </div>
-
-                <p class="_login_left_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam tellus elit.</p>
-
-                <Button type="primary">Learn More</Button>
-            </div>
 
             <div class="_login_right">
                 <div class="_login_main">
                     <div class="_login_top _1border_color">
-                        <p class="_login_top_text">Login your account</p>
+                        <p class="_login_top_text">register your account</p>
                     </div>
 
                     <div class="_login_form">
                         <Form>
                             <FormItem prop="user" :error="error.email">
-                                <Input  size="large" type="text" v-model="form.email" placeholder="Username">
+                                <Input  size="large" type="text" v-model="form.email" placeholder="email">
                                     <Icon type="ios-person-outline" slot="prepend"></Icon>
                                 </Input>
                             </FormItem>
                             <FormItem prop="password" :error="error.password">
                                 <Input size="large" type="password" v-model="form.password" placeholder="Password">
+                                    <Icon type="ios-lock-outline" slot="prepend"></Icon>
+                                </Input>
+                            </FormItem>
+                              <FormItem prop="password" :error="error.fullName">
+                                <Input size="large" type="password" v-model="form.username" placeholder="fullName">
                                     <Icon type="ios-lock-outline" slot="prepend"></Icon>
                                 </Input>
                             </FormItem>
@@ -41,7 +32,7 @@
                     </div>
 
                     <div class="_login_bottom">
-                        <p class="_login_do"> Create?  <router-link class="_3link _mar_l5" to="/register">Register Now</router-link></p>
+                        <p class="_login_do">Don't have Account?  <router-link class="_3link _mar_l5" to="/">Login Now</router-link></p>
                     </div>
                 </div>
             </div>
@@ -54,12 +45,14 @@ export default {
   data(){
     return{
       form: {
-            email: 'admin@gmail.com',
-            password: '123456'
+            email: '',
+            password: '',
+            username: '',
         },
       error: {
             email: '',
-            password: ''
+            password: '',
+            username: ''
         },
       isLoading:false,
       reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
@@ -74,6 +67,10 @@ export default {
         let flag = 1
         if(!this.form.email  || this.form.email.trim()=='' || this.form.email==null){
             this.error.email ='Email is required!'
+            flag = 0
+        }
+         if(!this.form.username  || this.form.username.trim()=='' || this.form.username==null){
+            this.error.username ='Full name is required!'
             flag = 0
         }
         if (this.form.email && !this.reg.test(this.form.email)) {
@@ -95,11 +92,11 @@ export default {
 
         this.isLoading = true;
 
-        const res = await this.callApi('post','/auth/login', this.form)
+        const res = await this.callApi('post','/auth/register', this.form)
         if(res.status==200){
             this.s("Login Successful")
             this.clearData2()
-               window.location.reload();
+            window.location.reload();
         }
 
         this.isLoading = false;

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use Illuminate\Support\Facades\Auth;
 
+use Illuminate\Support\Facades\Hash;
 class AuthService
 {
     private $authQuery;
@@ -23,6 +24,12 @@ class AuthService
             ],401);
         }
     }
+    public function register($data){
+        $data['password'] = Hash::make($data['password']);
+        $this->authQuery->register($data);
+    }
+
+    
 
 }
 

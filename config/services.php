@@ -30,10 +30,10 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
     'facebook' => [
-        'client_id' => 616541679640610,
-        'client_secret' =>'ba1a1c371c6f4e7d16484003209e53f8',
-        'redirect' => 'https://mytestapp.localhost/callback-url',
-        'default_graph_version' => 'v2.12'
+        'client_id' => env('FACEBOOK_CLIENT_ID'),         // Your Facebook App Client ID
+        'client_secret' => env('FACEBOOK_CLIENT_SECRET'), // Your Facebook App Client Secret
+        'redirect' => env('FACEBOOK_REDIRECT'), // Your application route used to redirect users back to your app after authentication
+        'default_graph_version' => 'v5.0',
     ],
 
 ];
