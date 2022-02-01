@@ -40,6 +40,8 @@ class FeatchingTweets extends Command
      */
     public function handle()
     {
+        \Log::info("running..1");
+        return 1;
      
 
         $all_twetter_users =  Category::select('id','twitter_user_id')->get();

@@ -41,7 +41,8 @@ class PostingToTheInstagram extends Command
      */
     public function handle()
     {
-
+        \Log::info("running..2");
+        return 1;
   
             $allposts =   User::where('is_ins_scheduled',1)->with('post')->whereHas('post')->get();
             $ids = [];
