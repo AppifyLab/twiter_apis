@@ -13,8 +13,20 @@ class Kernel extends ConsoleKernel
      * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
      * @return void
      */
+    protected $commands = [
+        Commands\PostingToTheInstagram::class,
+        Commands\FeatchingTweets::class,
+        
+    ];
     protected function schedule(Schedule $schedule)
     {
+        $schedule->command('command:PostingToTheInstagram')
+        ->everyMinute();
+        $schedule->command('command:FeatchingTweets')
+        ->everyMinute();
+        
+        // $schedule->command('command:PostingToTheInstagram')
+        //         ->everyFiveMinutes();
         // $schedule->command('inspire')->hourly();
     }
 

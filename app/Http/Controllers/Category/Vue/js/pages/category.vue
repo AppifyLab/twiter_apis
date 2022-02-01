@@ -4,8 +4,8 @@
 			<div class="row">
 				<div class="col-12 col-md-12 col-lg-12 _mar_b10">
 					<Alert show-icon>
-						<span style="font-weight:bold;"> Total Twitter : {{twitterData.total}}</span>
-						<template slot="desc">All twitter with search, create, edit and delete options.</template>
+						<!-- <span style="font-weight:bold;"> Total Twitter : {{twitterData.total}}</span> -->
+						<template slot="desc">Twitter user name.</template>
 					</Alert>
 				</div>
 				<div class="col-12 col-md-12 col-lg-12">
@@ -15,12 +15,12 @@
 							<div class="_1card_top_left">
 
 								<div class="_1card_top_search">
-									<Input @on-change="serchResetlt" v-model="str" suffix="ios-search" placeholder="Search twiter by name ..." />
+									<!-- <Input @on-change="serchResetlt" v-model="str" suffix="ios-search" placeholder="Search twiter by name ..." /> -->
 								</div>
 
 							</div>
 					
-							<addCategory :category="twitterData"/>
+							<addCategory v-if="!twitterData.data || twitterData.data.length<=0" :category="twitterData"/>
 						
 
 						</div>

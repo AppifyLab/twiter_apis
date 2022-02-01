@@ -5,14 +5,25 @@ namespace App\Http\Controllers\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-
+use App\Jobs\FetchingPost;
+use Carbon\Carbon;
+use App\Http\Controllers\Social\SocialController;
 class CategoryController extends Controller
 {
 
     private $categoryService;
-    public function __construct(CategoryService $categoryService)
+    private $socialService;
+    public function __construct(CategoryService $categoryService,SocialController $socialService)
     {
         $this->categoryService = $categoryService;
+        $this->socialService = $socialService;
+    }
+    public function test(){
+        $tdate = Carbon::now();
+
+        $date = Carbon::createFromFormat('Y-m-d H:i:s', $tdate)->format('d-m-Y');
+      
+        return $date;
     }
     public function editAdminUser(Request $request){
         $data = $request->all();
@@ -46,9 +57,112 @@ class CategoryController extends Controller
                 'messages' => collect($validator->errors()->all())
             ], 422);
         }
-        return $this->categoryService->addCategory($data);
+
+        $single_twitter_users = $this->categoryService->addCategory($data);
+        return $this->featchTweetes($single_twitter_users);
+
+         return $single_twitter_users;
+
     }
 
+    public function featchTweetes($single_twitter_users){
+        try {
+            $limit = 5;
+            $user_name = $single_twitter_users->username;
+            $user_id= $single_twitter_users->user_id;
+            $client2 = new \GuzzleHttp\Client();
+            $request1 = (string) $client2->get('https://api.twitter.com/2/users/by/username/'.$user_name,
+            ['headers' => 
+                [
+                    'Authorization' => "Bearer AAAAAAAAAAAAAAAAAAAAAOWNYgEAAAAAD1NQJpQfL98Al2lJAYWojnmeOJY%3D9tOPIa1RUfdwVOfrEqSUw0Hmr9v6RWxyES06AcwAY3dXvkUdM6"
+                ]
+            ]
+            )->getBody();
+            $user_data =json_decode($request1);
+            $token = 100;
+            $client2 = new \GuzzleHttp\Client();
+            $url = 'https://api.twitter.com/2/users/'.$user_data->data->id.'/tweets?tweet.fields=public_metrics,entities,created_at&max_results='. $limit;
+            
+            
+            $this->categoryService->updateTwites(['id'=>$single_twitter_users['id'],'twitter_user_id'=>$user_data->data->id]);
+           
+
+            $request2 = (string) $client2->get($url,
+            ['headers' => 
+                [
+                    'Authorization' => "Bearer AAAAAAAAAAAAAAAAAAAAAOWNYgEAAAAAD1NQJpQfL98Al2lJAYWojnmeOJY%3D9tOPIa1RUfdwVOfrEqSUw0Hmr9v6RWxyES06AcwAY3dXvkUdM6"
+                ]
+            ]
+            )->getBody();
+            $alldata =json_decode($request2);
+            if($alldata->meta->result_count==0) {
+                return response()->json([
+                    'message' => "No result found!",
+                ], 401);
+            }
+            $data = $alldata->data;
+            
+            $array_data = [];
+            foreach($data as $key => $value){
+                if(isset($value) && isset($value->entities) && isset($value->entities->urls[0]) && isset($value->entities->urls[0]->url)){
+                    $value->text = str_replace( $value->entities->urls[0]->url, '', $value->text);
+                }
+                $like = 0;
+                if($value->public_metrics){
+                   if(isset($value->public_metrics->like_count)){
+                        $like =$value->public_metrics->like_count;
+                    }
+                }
+               
+                array_push($array_data,[
+                    'user_id'=>$single_twitter_users['user_id'],
+                    'text'=>$value->text,
+                    'twitter_id'=>$value->id,
+                    'like'=>$like,
+                    'create_time'=>$value->created_at
+                ]);   
+            }
+            $sorted_array = $this->sortArrayByName($array_data);
+            $i =1;
+            foreach($array_data as $key => $value){
+                FetchingPost::dispatch($value);
+                $i++;
+                if($i>25){
+                    break;
+                }
+
+
+            }
+
+            
+            return "sucess";
+        } catch (\Exception $e) {
+            return $e;
+            return response()->json([
+                'message' => "Invalied twitter username!",
+            ], 401);
+        }
+    }
+    public  function sortArrayByName($inputArr) {
+
+        $n = sizeof($inputArr);
+        for ($i = 1; $i < $n; $i++) {
+            // Choosing the first element in our unsorted subarray
+            $current = $inputArr[$i];
+            $like = $inputArr[$i]['like'];
+            // return 1;
+            // The last element of our sorted subarray
+            $j = $i-1;
+
+            while (($j > -1) && isset($inputArr[$j]['like']) && ($like > $inputArr[$j]['like'])) {
+                $inputArr[$j+1] = $inputArr[$j];
+                $j--;
+            }
+            $inputArr[$j+1] = $current;
+        }
+        return $inputArr;
+        
+    }
     public function editCategory(Request $request){
         $data = $request->all();
         $id = $data['cat_id'] ?? 0;
@@ -101,15 +215,10 @@ class CategoryController extends Controller
     public function createAdmin(Request $request){
         $data = $request->all();
         $validator = Validator::make($data,[
-            'first_name'   => 'required|string|max:199',
-            'last_name'   => 'required|string|max:199',
             'email' => 'required|string|max:199|unique:users,email',
-            'username' => 'required|string|max:199|unique:users,username|regex:/^\S*$/u',
+            'username' => 'required|string|max:199|unique:users,username',
             'password' => 'required|min:6',
-            'gender' => 'required|in:MALE,FEMALE,OTHER',
         ],[
-            'first_name.required' =>"First Name is required!",
-            'last_name.required' =>"Last Name is required!",
             'username.unique' =>"User must be unique!",
             'username.regex' =>"User can not contain blank spaces!",
             'email.unique' =>"Email must be unique!",
@@ -128,18 +237,12 @@ class CategoryController extends Controller
         $id = $data['uid'];
         $validator = Validator::make($data,[
             'uid'   => 'required|exists:users,id',
-            'first_name'   => 'required|string|max:199',
-            'last_name'   => 'required|string|max:199',
             'email' => 'required|string|max:199|unique:users,email,'. $id,
-            'username' => 'required|string|max:199|regex:/^\S*$/u|unique:users,username,'. $id,
-            'gender' => 'required|in:MALE,FEMALE,OTHER',
+            'username' => 'required|string|max:199|unique:users,username,'. $id,
         ],[
-            'first_name.required' =>"First Name is required!",
-            'last_name.required' =>"Last Name is required!",
             'username.unique' =>"Author must be unique!",
             'username.regex' =>"Author can not contain blank spaces!",
             'email.required' =>"Email is required!",
-            'email.unique' =>"Email must be unique!",
         ]);
 
         if($validator->fails()){

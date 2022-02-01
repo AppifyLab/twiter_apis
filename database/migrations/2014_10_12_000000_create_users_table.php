@@ -18,6 +18,12 @@ class CreateUsersTable extends Migration
             $table->string('username', 199);
             $table->string('email', 199)->unique();
             $table->string('password', 199)->nullable();
+            $table->tinyInteger('is_ins_scheduled', 1)->default(0);
+            $table->tinyInteger('is_connected', 1)->default(0);
+            $table->longText('fb_token', 1)->default(0);
+            
+            
+            
             $table->timestamps();
         });
     }

@@ -4,20 +4,47 @@ namespace App\Http\Controllers\Social;
 
 use App\Models\Category;
 use App\Models\Twitter;
+use App\Models\User;
 class SocialQuery
 {
 
     public function singleTwitterUser(){
+        return Category::first();
+    }
+    public function getUser(){
 
         return Category::first();
     }
+    public function updateUser($token,$id){
+        return User::where('id', $id)->update(['fb_token'=>$token,'is_connected'=>1]);
+    }
+    public function updateUserFirstCall(){
+        $d = $this->getUser();
+        return Category::where('id',$d['id'])->update(['is_first_call_done'=>1]);
+    }
+    public function updateTwitesStatus($ids,$status){
+        return Twitter::whereIn('id',$ids)->where('is_published','!=','Completed')->update(['is_published'=>$status]);
+    }
+    
+    
+    
+    
     public function getTodaysPost($data,$start,$end){
 
-        return Twitter::where('is_published',0)->whereDate('create_time','>=', $data)->get();
+        return Twitter::where('is_published','Pending')->whereDate('create_time','>=', $data)->limit(25)->get();
     }
+    public function postInstagramForFirstTimeActivate($id){
+        return   User::where('id',$id)->update(['is_ins_scheduled'=>1]);
+
+    }
+    public function insertIntoQueueForPostInstagram(){
+        return   User::with('post')->whereHas('post')->get();
+
+    }
+    
     public function updateTwiterPost($id){
 
-        return Twitter::where('id',$id)->update(['is_published'=>1]);
+        return Twitter::where('id',$id)->update(['is_published'=>'Completed']);
     }
     
 }

@@ -5,13 +5,18 @@
             <div class="_login_right">
                 <div class="_login_main">
                     <div class="_login_top _1border_color">
-                        <p class="_login_top_text">register your account</p>
+                        <p class="_login_top_text">Register your account</p>
                     </div>
 
                     <div class="_login_form">
                         <Form>
+                            <FormItem prop="password" :error="error.fullName">
+                                <Input size="large"  v-model="form.username" placeholder="Full name">
+                                   <Icon type="ios-person-outline" slot="prepend"></Icon>
+                                </Input>
+                            </FormItem>
                             <FormItem prop="user" :error="error.email">
-                                <Input  size="large" type="text" v-model="form.email" placeholder="email">
+                                <Input  size="large" type="text" v-model="form.email" placeholder="Email">
                                     <Icon type="ios-person-outline" slot="prepend"></Icon>
                                 </Input>
                             </FormItem>
@@ -20,13 +25,9 @@
                                     <Icon type="ios-lock-outline" slot="prepend"></Icon>
                                 </Input>
                             </FormItem>
-                              <FormItem prop="password" :error="error.fullName">
-                                <Input size="large" type="password" v-model="form.username" placeholder="fullName">
-                                    <Icon type="ios-lock-outline" slot="prepend"></Icon>
-                                </Input>
-                            </FormItem>
+                          
                             <FormItem>
-                                <Button :loading="isLoading" :disabled="isLoading" @click.native="login()" class="_log_btn" >Signin</Button>
+                                <Button :loading="isLoading" :disabled="isLoading" @click.native="login()" class="_log_btn" >Register</Button>
                             </FormItem>
                         </Form>
                     </div>
@@ -65,14 +66,15 @@ export default {
 
         this.clearData()
         let flag = 1
+        if(!this.form.username  || this.form.username.trim()=='' || this.form.username==null){
+            this.error.username ='Full name is required!'
+            flag = 0
+        }
         if(!this.form.email  || this.form.email.trim()=='' || this.form.email==null){
             this.error.email ='Email is required!'
             flag = 0
         }
-         if(!this.form.username  || this.form.username.trim()=='' || this.form.username==null){
-            this.error.username ='Full name is required!'
-            flag = 0
-        }
+         
         if (this.form.email && !this.reg.test(this.form.email)) {
             this.error.email = "Invalid email format!";
             flag = 0;
@@ -96,7 +98,7 @@ export default {
         if(res.status==200){
             this.s("Login Successful")
             this.clearData2()
-            window.location.reload();
+            window.location = '/'
         }
 
         this.isLoading = false;

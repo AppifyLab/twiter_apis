@@ -33,14 +33,55 @@ class ProcessPodcast implements ShouldQueue
      *
      * @return void
      */
+    public function imageProcess($text){
+        \Log::info("image running...");
+            $img = imagecreatefromjpeg(public_path('/img/test_png.jpeg'));
+            
+            $white = imagecolorallocate($img, 255, 255, 255);
+            $txt_input =$text;
+            
+            // return  sizeof($txt_input);
+            $txt = wordwrap($txt_input, 50, "\n", TRUE);
+            $font = public_path('/font/Roboto-Regular.ttf'); 
+            $font_size = 35;
+            $angle = 0;
+            $text_color = imagecolorallocate($img, 0xFF, 0xFF, 0xFF);
+            // THE IMAGE SIZE
+            $width = imagesx($img);
+            $height = imagesy($img);
+            $splittext = explode ( "\n" , $txt );
+            $lines = count($splittext);
+                  $i = 0;
+            foreach ($splittext as $text) {
+                $text_box = imagettfbbox($font_size, $angle, $font, $txt);
+                $text_width = abs(max($text_box[2], $text_box[4]));
+                $text_height = abs(max($text_box[5], $text_box[7]));
+                // $x = 0;
+                $x = (imagesx($img) - $text_width)/2;
+                $y = ((imagesy($img) + $text_height)/2)-($lines-2)*$text_height-30;
+                // $y = ((imagesy($img) + $text_height)/2);
+                $lines=$lines-1;
+                $y = $y+$i*30;
+                $i++;
+                imagettftext($img, $font_size, $angle, $x, $y, $text_color, $font, $text);
+                // break;
+            }
+            $save=public_path('/img/new23.png'); 
+            imagepng($img,$save,0,NULL); 
+            imagedestroy($img);
+            return $save;
+    }
     public function handle()
     {
 
-        $endpoint = "https://graph.facebook.com/v5.0/17841403387597803/media";
-        $accessToken = 'EAAIwvcvN4CIBAPZCAirq0MnOQCjx5Bw9zo6OZAeZBdQnZAN8W1XG7aFb02HThTfM44uuV494jqxcS2r6RZALFUbvjk8ZCJIAiFzHuKZBRHziyIvhBUXLc0cn3VZAiY029ETJrqRr5zNaUKmNlqHjj5dMeOv9HVzovGFBMKIHjfP2Uy2TPjOCZAzYk';
-        // return $image;
+        // try {
+        $link = $this->imageProcess($this->data->post->text);
+        $id = $this->data->bussness_id;
+        
+        $endpoint = "https://graph.facebook.com/v5.0/$id/media";
+        $accessToken = $this->data->fb_token;
+        // $accessToken =  'EAAF67SZB7BjoBAMrEm63kRSgzh5QSigHhD3DDxA5m1yTQoC4VagxaZBoMuoDCXBYAeP8thwgtzbxIsQm80DjZCtweouScZCSF62voCGg2eb0jjPFFfd6oR58xnYIbaA0fYzl7WUYe74QhJQgslFP2LHNZC87VZACFVzEAZAGnz65qqP67YUiXcWGag7ffeKKmZBmIahBZBdowVBuigvhVC8m0tU368lEuqfOZCtJfgUBc8CgZDZD';
         $params = array( // POST
-            // 'image_url' => '/Users/appifylab_01/laravel_project/instagramapi/public/img/new23.png',
             'image_url' => 'https://cdn.forehand.se/uploads/1638203773.png',
             'caption' => "testing ..",
             'access_token' => $accessToken
@@ -58,7 +99,7 @@ class ProcessPodcast implements ShouldQueue
         $response  = json_decode($response);
         curl_close( $ch );
 
-        $publishImageEndpoint = "https://graph.facebook.com/v5.0/17841403387597803/media_publish";
+        $publishImageEndpoint = "https://graph.facebook.com/v5.0/$id/media_publish";
         $params = array(
             'creation_id' =>  $response->id,
             'access_token' => $accessToken
@@ -73,9 +114,18 @@ class ProcessPodcast implements ShouldQueue
 
 		$response = curl_exec( $ch );
 		curl_close( $ch );
- 
-        //
-         Twitter::where('id', $this->data->id)->update(['is_published'=>1]);
-        return $response;
+
+        Twitter::where('id', $this->data->post->id)->update(['is_published'=>"Complited"]);
+
+        
+        // } catch (\Throwable $th) {
+          
+        //     \Log::info(["he"=>"fail"]);
+        //         Twitter::where('id', $this->data->post->id)->update(['is_published'=>"Pending"]);
+        // }
+        // return 1;
+         
+        //  \Log::info($response);
+        
     }
 }

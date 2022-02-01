@@ -153,17 +153,21 @@
             <Menu :theme="theme3" :active-name="activeRoute">
               <MenuGroup>
                 <!-- <p class="_group_name"><Icon type="ios-more" /></p> -->
-                <MenuItem to="/" name="index">
+                <!-- <MenuItem to="/twitter" name="index">
                     <Icon type="md-home" />
                     <span class="submenu_text">Home</span>
-                </MenuItem>
-                <MenuItem to="/admin" name="admin">
-                    <Icon type="ios-contacts" />
-                    <span class="submenu_text">Admin</span>
-                </MenuItem>
-                <MenuItem to="/categories" name="categories">
+                </MenuItem> -->
+                <!-- <MenuItem to="/twitter" name="twitter">
                     <Icon type="ios-apps" />
-                    <span class="submenu_text">Categories</span>
+                    <span class="submenu_text">Twitter posts</span>
+                </MenuItem> -->
+                <!-- <MenuItem to="/users" name="users">
+                    <Icon type="ios-contacts" />
+                    <span class="submenu_text">Users</span>
+                </MenuItem> -->
+                <MenuItem to="/twitter_users" name="twitter_users">
+                    <Icon type="ios-apps" />
+                    <span class="submenu_text">Twitter Users</span>
                 </MenuItem>
                 <MenuItem to="/twitter" name="twitter">
                     <Icon type="ios-apps" />

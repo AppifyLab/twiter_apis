@@ -26,7 +26,7 @@ class AuthService
     }
     public function register($data){
         $data['password'] = Hash::make($data['password']);
-        $this->authQuery->register($data);
+        return $this->authQuery->register($data);
     }
 
     

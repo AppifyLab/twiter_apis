@@ -3,9 +3,6 @@
 namespace App\Http\Controllers\Category;
 
 use App\Models\Category;
-use App\Models\Information;
-use App\Models\Subcategory;
-use App\Models\SubSubcategory;
 use App\Models\User;
 use App\Models\Twitter;
 use Illuminate\Database\Eloquent\Builder;
@@ -18,6 +15,11 @@ class CategoryQuery
     {
         return User::where('id','!=',$id)->where('email',$email)->first();
     }
+    public function insertTwitters($data)
+    {
+        return User::where('id','!=',$id)->where('email',$email)->first();
+    }
+    
     
     public function editAdminUser($key, $value, $user){
         return User::where($key, $value)->update($user);
@@ -32,7 +34,10 @@ class CategoryQuery
     public function editCategory($data){
         $id = $data["cat_id"] ?? 0;
         unset($data["cat_id"]);
-        return Category::where('id', $id)->update($data);
+        return Category::where('id', $id)->where('user_id', $data['user_id'])->update($data);
+    }
+    public function updateTwites($data){
+        return Category::where('id', $data['id'])->update($data);
     }
     public function deleteCategory($data){
         $id = $data["cat_id"] ?? 0;
@@ -47,17 +52,7 @@ class CategoryQuery
     }
 
     public function getAllTwitterPostList($data){
-
-        // return  Twitter::all();
-        $str = $data["str"] ?? null;
-        $str = "%".$str."%";
-        
-       return Twitter::orderByDesc('id')->paginate(10);
-       return Twitter::when($str, function($q) use($str){
-        $q->where('text', 'like', $str);
-    })->orderByDesc('id')->paginate(10);
-     
-
+       return Twitter::paginate(10);
     }   
     //================================ Category-End ========================================
 
@@ -72,17 +67,7 @@ class CategoryQuery
         return User::where('id', $uid)->update($data);
     }
     public function getAllAdmins($data){
-        $str = $data["str"] ?? null;
-        $str = "%".$str."%";
-        return User::when($str, function($q) use($str){
-            $q->whereRaw("concat(
-                first_name,
-                ' ', last_name,
-                ' ', email,
-                ' ', username,
-                ' ', gender
-                ) like '$str' ");
-        })->where('role', '!=', 'SUPER_ADMIN')->orderByDesc('id')->paginate(10);
+        return User::orderByDesc('id')->paginate(10);
     }
     public function deleteAdmin($data){
         $id = $data["uid"] ?? 0;

@@ -4,8 +4,8 @@
 			<div class="row">
 				<div class="col-12 col-md-12 col-lg-12 _mar_b10">
 					<Alert show-icon>
-						<span style="font-weight:bold;"> Total admins : {{admins.total}}</span>
-						<template slot="desc">All admins with search, create, edit and delete options.</template>
+						<span style="font-weight:bold;"> Total users : {{admins.total}}</span>
+						<template slot="desc">All users with search, create, edit and delete options.</template>
 					</Alert>
 				</div>
 				<div class="col-12 col-md-12 col-lg-12">
@@ -14,9 +14,9 @@
 
 							<div class="_1card_top_left">
 
-								<div class="_1card_top_search">
+								<!-- <div class="_1card_top_search">
 									<Input @on-change="serchResetlt" v-model="str" suffix="ios-search" placeholder="Search admins by name, email, user & ..." />
-								</div>
+								</div> -->
 
 							</div>
 							<!--create-modal-start-->
@@ -27,16 +27,14 @@
 						<div class="_table_responsive">
 							<Table class="" border :columns="columns1" :data="admins.data">
 									<template slot-scope="{row }" slot="name">
-										<p>{{row.first_name}} {{row.last_name}}</p>
+										<p>{{row.username}} </p>
 									</template>
 
 									<template slot-scope="{row}" slot="email">
                                         <p>{{row.email}}</p>
 									</template>
 
-									<template slot-scope="{row}" slot="gender">
-                                        <p>{{row.gender}}</p>
-									</template>
+								
 
 
 									<template slot-scope="{row, index }" slot="action">
@@ -102,12 +100,7 @@ export default {
 					width:320,
 					key: 'email'
 				},
-				{
-					title: 'Gender',
-                    align: 'center',
-					width:125,
-					slot: 'gender'
-				},
+			
 				{
 					title: 'Action',
                     minWidth: 250,

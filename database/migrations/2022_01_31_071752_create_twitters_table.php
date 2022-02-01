@@ -19,7 +19,7 @@ class CreateTwittersTable extends Migration
             $table->string('create_time', 199);
             $table->string('twitter_id', 199);
             $table->integer('like');
-            $table->integer('is_published')->default(0);
+            $table->string('is_published',199)->default('Pending');
             $table->timestamps();
         });
     }

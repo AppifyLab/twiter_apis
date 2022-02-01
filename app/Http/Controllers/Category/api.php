@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Category\CategoryController;
 
 
+Route::get('/test',  [CategoryController::class, 'test']);
 Route::group(['prefix'=>'category','middleware'=>'auth'],function (){
     Route::post('/editAdminUser',  [CategoryController::class, 'editAdminUser']);
     Route::post('/editAdminPassword',  [CategoryController::class, 'editAdminPassword']);

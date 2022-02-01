@@ -10,7 +10,7 @@ use App\Models\Twitter;
 use Carbon\Carbon;
 use App\Jobs\ProcessPodcast;
 use App\Jobs\FetchingPost;
-
+use Illuminate\Support\Facades\Auth;
 
 
 class SocialController extends Controller
@@ -39,12 +39,16 @@ class SocialController extends Controller
     }
     public function facebookredirect(Request $request){
         $user = Socialite::driver('facebook')->user();
-        // return $user->token;
+
+        $id =  Auth::user()->id;
+        
+        $this->socialService->updateUser($user->token,$id);
+        return redirect('/twitter');
+        
+        
        return $this->getFbPage($user->token);
 
     }
-
-
     public function getFbPage($token){
 
         // $token = $this->login();
@@ -143,9 +147,8 @@ class SocialController extends Controller
 
         
     }
-
-
-    public function instagramPublishPhoto($text){
+    public function instagramPublishPhoto(){
+        $text = "hello";
 
         $endpoint = "https://graph.facebook.com/v5.0/17841403387597803/media";
         $accessToken = 'EAAIwvcvN4CIBAPZCAirq0MnOQCjx5Bw9zo6OZAeZBdQnZAN8W1XG7aFb02HThTfM44uuV494jqxcS2r6RZALFUbvjk8ZCJIAiFzHuKZBRHziyIvhBUXLc0cn3VZAiY029ETJrqRr5zNaUKmNlqHjj5dMeOv9HVzovGFBMKIHjfP2Uy2TPjOCZAzYk';
@@ -188,6 +191,9 @@ class SocialController extends Controller
     }
 
 
+
+
+
     public function getTodaysPost(){
         $date = date("Y-m-d");
         $start_time = $date.'T00:00:00Z';
@@ -198,16 +204,95 @@ class SocialController extends Controller
         }
         return "susscess";
     }
+    
+
+
+
+    public function getUser(){
+        return  $this->socialService->getUser();
+        
+    }
+
+    public function insertIntoQueueForPostInstagram(){
+        $allposts =  $this->socialService->insertIntoQueueForPostInstagram();
+        $ids = [];
+        foreach ($allposts as $key => $value) {
+            if(isset($value['post'])){
+                ProcessPodcast::dispatch($value['post']);
+                array_push($ids,$value['post']->id);
+            }
+        }
+        $this->socialService->updateTwitesStatus($ids,'Processing');
+          
+        return "susscess";
+    }
+
+
+   
+    public function postInstagramForFirstTimeActivate(){
+        $id = Auth::user()->id;
+        return $this->socialService->postInstagramForFirstTimeActivate($id);
+    }
+    public function featchTweetes(){
+        try {
+            $limit = 100;
+            $single_twitter_users = $this->socialService->singleTwitterUser();
+            return $single_twitter_users;
+            if(!$single_twitter_users){
+                return response()->json([
+                    'message' => "Please add a twitter user!",
+                ], 401);
+            }
+            
+            $user_name = $single_twitter_users->username;
+            $client2 = new \GuzzleHttp\Client();
+            $request1 = (string) $client2->get('https://api.twitter.com/2/users/by/username/'.$user_name,
+            ['headers' => 
+                [
+                    'Authorization' => "Bearer AAAAAAAAAAAAAAAAAAAAAOWNYgEAAAAAD1NQJpQfL98Al2lJAYWojnmeOJY%3D9tOPIa1RUfdwVOfrEqSUw0Hmr9v6RWxyES06AcwAY3dXvkUdM6"
+                ]
+            ]
+            )->getBody();
+            $user_data =json_decode($request1);
+            $token = 100;
+            $client2 = new \GuzzleHttp\Client();
+            $url = 'https://api.twitter.com/2/users/'.$user_data->data->id.'/tweets?tweet.fields=public_metrics,entities,created_at&max_results='. $limit;
+            $request2 = (string) $client2->get($url,
+            ['headers' => 
+                [
+                    'Authorization' => "Bearer AAAAAAAAAAAAAAAAAAAAAOWNYgEAAAAAD1NQJpQfL98Al2lJAYWojnmeOJY%3D9tOPIa1RUfdwVOfrEqSUw0Hmr9v6RWxyES06AcwAY3dXvkUdM6"
+                ]
+            ]
+            )->getBody();
+            $alldata =json_decode($request2);
+            if($alldata->meta->result_count==0) {
+                return response()->json([
+                    'message' => "No result found!",
+                ], 401);
+            }
+            $data = $alldata->data;
+            FetchingPost::dispatch($data);
+            return "sucess";
+        } catch (\Exception $e) {
+            return $e;
+            return response()->json([
+                'message' => "Invalied twitter username!",
+            ], 401);
+        }
+    }
 
     public function getTwites(){
         $date = date("Y-m-d");
         $start_time = $date.'T00:00:00Z';
         $end_time = $date.'T23:59:00Z';
         try {
-            
-            //code...
             $limit = 100;
             $single_twitter_users = $this->socialService->singleTwitterUser();
+            if(!$single_twitter_users){
+                return response()->json([
+                    'message' => "Please add a twitter username!",
+                ], 401);
+            }
             $user_name = $single_twitter_users->username;
 
             $client2 = new \GuzzleHttp\Client();

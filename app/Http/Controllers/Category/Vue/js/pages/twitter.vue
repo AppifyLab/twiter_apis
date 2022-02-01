@@ -4,8 +4,8 @@
 			<div class="row">
 				<div class="col-12 col-md-12 col-lg-12 _mar_b10">
 					<Alert show-icon>
-						<span style="font-weight:bold;"> Total Twitter : {{twitterData.total}}</span>
-						<template slot="desc">All twitter with search, create, edit and delete options.</template>
+						<span style="font-weight:bold;"> Total tweets : {{twitterData.total}}</span>
+						<template slot="desc">All tweets.</template>
 					</Alert>
 				</div>
 				<div class="col-12 col-md-12 col-lg-12">
@@ -15,7 +15,12 @@
 							<div class="_1card_top_left">
 
 								<div class="_1card_top_search">
-									<Input @on-change="serchResetlt" v-model="str" suffix="ios-search" placeholder="Search twiter by name ..." />
+                                    
+                                    <a v-if="!$store.state.authUser.is_connected" href="/social/login"><Button>Connect</Button></a>
+                                    <Button v-if="twitterData && twitterData.data && twitterData.data.length>0 && !$store.state.authUser.is_ins_scheduled && !isLoading" @click="postInstagramForFirstTime">Schedule instagram post</Button>
+                                    <Button v-if="isLoading"> Loading..</Button>
+                                    <Button v-if="!twitterData || !twitterData.data || twitterData.data.length==0" @click="featchTweetes">Fetch popular twitter post</Button>
+                                    
 								</div>
 
 							</div>
@@ -49,6 +54,8 @@ export default {
 
 	data () {
 		return {
+            // isLoading:false,
+            user:{},
             twitterData:[],
 			// allCounts:'',
 			isLoading:false,
@@ -60,39 +67,69 @@ export default {
 
 			datacollection: null,
 			columns1: [
-				 {
-                    title: 'Sl.',
-                    width: 150,
-					type:'index',
-                    align: 'center',
-
-					indexMethod: (row) => {
-                        return (row._index + 1) + (this.perPage * this.page) - this.perPage;
-                    }
-                },
-				{
-					title: 'content',
-					slot: 'text',
-					width:1000,
+				
+                {
+					title: 'Total likes',
+					key: 'like',
+					width:150,
 				},
-                // {
-				// 	title: 'Insert time',
-				// 	key: 'created_at',
-				// 	width:400,
-				// }
+				
+                {
+					title: 'Twitter post id',
+					key: 'twitter_id',
+					width:250,
+				},
+                 {
+					title: 'Status',
+					key: 'is_published',
+					width:250,
+				},
+                {
+					title: 'Content',
+					slot: 'text',
+					width:800,
+				}
 			
 
-			]
+			],
+
 		}
 	},
 
 	methods: {
+    async connectFacebook(){
+		const res = await this.callApi('get', `/social/login`)
+        console.log(res)
+
+    },
 	async alltwitterData(){
 		const res = await this.callApi('get', `/category/getAllTwitterPostList?page=${this.page}&perPage=${this.perPage}&str=${this.str}`)
 			if(res.status==200){
 				this.twitterData = res.data;
 			}
 	},
+    async featchTweetes(){
+        const res = await this.callApi('get', `/social/featchTweetes`)
+			if(res.status==200){
+				// this.twitterData = res.data;
+			}
+            console.log(res)
+    },
+
+    async postInstagramForFirstTime(){
+        // this.isLoading = true
+        // return 
+        this.isLoading = true
+        const res = await this.callApi('get', `/social/postInstagramForFirstTime`)
+        this.isLoading = false
+			if(res.status==200){
+                if(!this.$store.state.authUser.is_ins_scheduled){
+                    this.$store.state.authUser.is_ins_scheduled =1
+                }
+			}
+            console.log(res)
+    },
+    
 
 	serchResetlt:_.debounce(function (){
 		this.perPage = 10
@@ -103,6 +140,12 @@ export default {
 		this.perPage =e
 		this.paginateDataInfo(1)
 	},
+    async getUser(){
+         const res = await this.callApi('get', `/social/getUser`)
+			if(res.status==200){
+				this.user = res.data
+			}
+    },
 	paginateDataInfo(e){
 	   this.page = e
 		this.alltwitterData()
@@ -141,6 +184,7 @@ export default {
 
 	async created () {
 		this.alltwitterData()
+        this.getUser()
 	}
 }
 </script>

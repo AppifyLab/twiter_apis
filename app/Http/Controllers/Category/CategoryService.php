@@ -106,81 +106,44 @@ class CategoryService
     }
     //================================ Category-Start ========================================
     public function addCategory($data){
+        $data['user_id'] =  Auth::id();
         return $this->categoryQuery->addCategory($data);
     }
     public function editCategory($data){
+        $data['user_id'] =  Auth::id();
         return $this->categoryQuery->editCategory($data);
     }
+    public function updateTwites($data){
+      return $this->categoryQuery->updateTwites($data);
+  }
+    
     public function deleteCategory($data){
         return $this->categoryQuery->deleteCategory($data);
     }
     public function getAlltwitterData($data){
+      $data['user_id'] =  Auth::id();
         return $this->categoryQuery->getAlltwitterData($data);
     }
     public function getAllTwitterPostList($data){
         return $this->categoryQuery->getAllTwitterPostList($data);
     }
+    public function insertTwitters($data){
+        return $this->categoryQuery->insertTwitters($data);
+    }
+
+    
 
     
 
     //================================ Category-End ========================================
 
-    //================================ Subcategory-Start ========================================
-    public function addSubcategory($data){
-        return $this->categoryQuery->addSubcategory($data);
-    }
-    public function getCategories(){
-        return $this->categoryQuery->getCategories();
-    }
-    public function getAllSubcategories($data){
-        return $this->categoryQuery->getAllSubcategories($data);
-    }
-    public function editSubcategory($data){
-        return $this->categoryQuery->editSubcategory($data);
-    }
-    public function deletesubcategory($data){
-        return $this->categoryQuery->deletesubcategory($data);
-    }
-    //================================ Subcategory-End ========================================
-
-    //================================ Sub-Subcategory-Start ========================================
-    public function addSubsubcategory($data){
-        return $this->categoryQuery->addSubsubcategory($data);
-    }
-    public function getSubcategories($data){
-        return $this->categoryQuery->getSubcategories($data);
-    }
-    public function getSubsubcategories($data){
-        return $this->categoryQuery->getSubsubcategories($data);
-    }
-    public function getAllSubsubcategories($data){
-        return $this->categoryQuery->getAllSubsubcategories($data);
-    }
-    public function editSubsubcategory($data){
-        return $this->categoryQuery->editSubsubcategory($data);
-    }
-    public function deleteSubsubcategory($data){
-        return $this->categoryQuery->deleteSubsubcategory($data);
-    }
+ 
+ 
 
     //================================ Sub-Subcategory-End ========================================
 
 
     //================================ Information-Statt ========================================
-
-    public function addInformation($data){
-        return $this->categoryQuery->addInformation($data);
-    }
-    public function editInformation($data){
-        return $this->categoryQuery->editInformation($data);
-    }
-    public function getAllInfo($data){
-        return $this->categoryQuery->getAllInfo($data);
-    }
-    public function deleteInformation($data){
-        return $this->categoryQuery->deleteInformation($data);
-    }
-    //================================ Information-End ========================================
 
 
     //================================ Admin-Start ========================================

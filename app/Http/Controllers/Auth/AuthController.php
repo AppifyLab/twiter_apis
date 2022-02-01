@@ -159,7 +159,15 @@ class AuthController extends Controller
     }
     public function register(Request $request){
         $data = $request->all();
-        return $this->authService->register($data);
+        $user =  $this->authService->register($data);
+        if($user){
+           return $this->authService->login($data);
+        }
+        else {
+            return response()->json([
+                'messages' => "Invalid request"
+            ], 401);
+        }
     }
 
     

@@ -9,7 +9,7 @@ import categories from '../../app/Http/Controllers/Category/Vue/js/router'
 
 
  const mainRoutes = [
-    { path: '/', component: index, name: 'index'},
+    // { path: '/', component: index, name: 'index'},
     { path: '/register', component: register, name: 'register'},
     
 ]

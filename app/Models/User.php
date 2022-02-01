@@ -18,15 +18,9 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'first_name',
-        'last_name',
         'username',
         'email',
         'password',
-        'profile_pic',
-        'gender',
-        'role',
-        'status',
     ];
 
     /**
@@ -37,6 +31,11 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
     ];
+    
+    public function post()
+    {
+      return $this->hasOne(Twitter::class)->where('is_published','Pending');
+    }
 
     /**
      * The attributes that should be cast.

@@ -6,8 +6,9 @@ import twitter from '../pages/twitter.vue'
 
 
 const routes = [
-    {path : '/admin', component: admin, name: 'admin'},
-    {path : '/categories', component: categories, name: 'categories'},
+    {path : '/users', component: admin, name: 'users'},
+    {path : '/twitter_users', component: categories, name: 'twitter_users'},
+    { path: '/', component: twitter, name: 'twitter'},
     {path : '/profile', component: edit, name: 'edit'},
     {path : '/twitter', component: twitter, name: 'twitter'}
 

@@ -35,13 +35,13 @@
                                 </Input>
                             </FormItem>
                             <FormItem>
-                                <Button :loading="isLoading" :disabled="isLoading" @click.native="login()" class="_log_btn" >Signin</Button>
+                                <Button :loading="isLoading" :disabled="isLoading" @click.native="login()" class="_log_btn" >Log In</Button>
                             </FormItem>
                         </Form>
                     </div>
 
                     <div class="_login_bottom">
-                        <p class="_login_do"> Create?  <router-link class="_3link _mar_l5" to="/register">Register Now</router-link></p>
+                        <p class="_login_do"> Create New Account?  <router-link class="_3link _mar_l5" to="/register">Register Now</router-link></p>
                     </div>
                 </div>
             </div>

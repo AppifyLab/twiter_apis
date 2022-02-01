@@ -9,7 +9,11 @@ class Twitter extends Model
 {
     protected $fillable = [
         'text',
-        'twitter_id'
+        'twitter_id',
+        'create_time',
+        'is_published',
+        'like',
+        'user_id'
     ];
     use HasFactory;
 }

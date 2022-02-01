@@ -2085,13 +2085,17 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var routes = [{
-  path: '/admin',
+  path: '/users',
   component: _pages_admin_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
-  name: 'admin'
+  name: 'users'
 }, {
-  path: '/categories',
+  path: '/twitter_users',
   component: _pages_category_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
-  name: 'categories'
+  name: 'twitter_users'
+}, {
+  path: '/',
+  component: _pages_twitter_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
+  name: 'twitter'
 }, {
   path: '/profile',
   component: _pages_edit_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
@@ -2124,33 +2128,6 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -2242,23 +2219,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 flag = 1;
 
-                if (!_this.form.first_name || _this.form.first_name.trim() == '' || _this.form.first_name == null) {
-                  _this.error.first_name = 'First name is required!';
-                  flag = 0;
-                }
-
-                if (!_this.form.last_name || _this.form.last_name.trim() == '' || _this.form.last_name == null) {
-                  _this.error.last_name = 'Last name is required!';
-                  flag = 0;
-                }
-
                 if (_this.form.username.trim() == "") {
                   _this.error.username = "Username is required!";
-                  flag = 0;
-                }
-
-                if (_this.form.username.indexOf(" ") !== -1) {
-                  _this.error.username = "Username can not contain blank spaces!";
                   flag = 0;
                 }
 
@@ -2273,14 +2235,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 }
 
                 if (!(!_this.form.password || _this.form.password.trim() == '' || _this.form.password == null)) {
-                  _context.next = 11;
+                  _context.next = 8;
                   break;
                 }
 
                 _this.error.password = 'Password is required!';
                 return _context.abrupt("return");
 
-              case 11:
+              case 8:
                 if (_this.form.password.trim().length < 6) {
                   _this.error.password = 'Password must be at least 6 characters long!';
                   flag = 0;
@@ -2296,25 +2258,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   flag = 0;
                 }
 
-                if (!_this.form.gender) {
-                  _this.error.gender = "Please select a gender!";
-                  flag = 0;
-                }
-
                 if (!(flag == 0)) {
-                  _context.next = 17;
+                  _context.next = 13;
                   break;
                 }
 
                 return _context.abrupt("return");
 
-              case 17:
+              case 13:
                 _this.isLoading = true;
                 formObj = _this.form;
-                _context.next = 21;
+                _context.next = 17;
                 return _this.callApi('post', '/category/createAdmin', formObj);
 
-              case 21:
+              case 17:
                 res = _context.sent;
 
                 if (res.status == 200 || res.status == 201) {
@@ -2331,7 +2288,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _this.isLoading = false;
 
-              case 24:
+              case 20:
               case "end":
                 return _context.stop();
             }
@@ -2341,8 +2298,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     },
     clearDataError: function clearDataError() {
       this.error = {
-        first_name: '',
-        last_name: '',
         username: '',
         email: '',
         password: '',
@@ -2351,8 +2306,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     },
     clearData: function clearData() {
       this.form = {
-        first_name: '',
-        last_name: '',
         username: '',
         email: '',
         password: '',
@@ -2433,30 +2386,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['admin'],
   data: function data() {
@@ -2465,21 +2394,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       isLoading: false,
       form: {
         uid: '',
-        first_name: '',
-        last_name: '',
         username: '',
         email: '',
-        password: '',
-        gender: ''
+        password: ''
       },
       repassword: '',
       error: {
-        first_name: '',
-        last_name: '',
         username: '',
         email: '',
-        password: '',
-        gender: ''
+        password: ''
       },
       reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
     };
@@ -2498,23 +2421,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 flag = 1;
 
-                if (!_this.form.first_name || _this.form.first_name.trim() == '' || _this.form.first_name == null) {
-                  _this.error.first_name = 'First name is required!';
-                  flag = 0;
-                }
-
-                if (!_this.form.last_name || _this.form.last_name.trim() == '' || _this.form.last_name == null) {
-                  _this.error.last_name = 'Last name is required!';
-                  flag = 0;
-                }
-
                 if (_this.form.username.trim() == "") {
                   _this.error.username = "Username is required!";
-                  flag = 0;
-                }
-
-                if (_this.form.username.indexOf(" ") !== -1) {
-                  _this.error.username = "Username can not contain blank spaces!";
                   flag = 0;
                 }
 
@@ -2526,55 +2434,48 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 if (_this.form.email && !_this.reg.test(_this.form.email)) {
                   _this.error.email = "Invalid email format!";
                   flag = 0;
-                }
+                } // if(this.form.password && this.form.password.trim().length <6 ){
+                // 	this.error.password ='Password must be at least 6 characters long!'
+                // 	flag = 0
+                // }
+                // if(this.form.password && (!this.repassword  || this.repassword.trim()=='' || this.repassword==null)){
+                // 	this.error.repassword ='Confirm password is required!'
+                // 	flag = 0
+                // }
+                // if (this.form.password && this.repassword && (this.form.password != this.repassword)) {
+                // 	this.error.repassword = "Password does not match!";
+                // 	flag = 0;
+                // }
 
-                if (_this.form.password && _this.form.password.trim().length < 6) {
-                  _this.error.password = 'Password must be at least 6 characters long!';
-                  flag = 0;
-                }
-
-                if (_this.form.password && (!_this.repassword || _this.repassword.trim() == '' || _this.repassword == null)) {
-                  _this.error.repassword = 'Confirm password is required!';
-                  flag = 0;
-                }
-
-                if (_this.form.password && _this.repassword && _this.form.password != _this.repassword) {
-                  _this.error.repassword = "Password does not match!";
-                  flag = 0;
-                }
-
-                if (!_this.form.gender) {
-                  _this.error.gender = "Please select a gender!";
-                  flag = 0;
-                }
 
                 if (!(flag == 0)) {
-                  _context.next = 14;
+                  _context.next = 7;
                   break;
                 }
 
                 return _context.abrupt("return");
 
-              case 14:
+              case 7:
                 _this.isLoading = true;
                 formObj = _this.form;
-                _context.next = 18;
+                _context.next = 11;
                 return _this.callApi('post', '/category/editAdmin', formObj);
 
-              case 18:
+              case 11:
                 res = _context.sent;
 
                 if (res.status == 200) {
                   _this.createModal = false;
 
-                  _this.s("Admin updated successfully !"); // this.admin.total++
-                  // this.admin.data.unshift(res.data)
+                  _this.s("User updated successfully !");
 
+                  _this.admin.email = _this.form.email;
+                  _this.admin.username = _this.form.username;
                 }
 
                 _this.isLoading = false;
 
-              case 21:
+              case 14:
               case "end":
                 return _context.stop();
             }
@@ -2584,23 +2485,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     },
     clearDataError: function clearDataError() {
       this.error = {
-        first_name: '',
-        last_name: '',
         username: '',
         email: '',
-        password: '',
-        gender: ''
+        password: ''
       };
     },
     formData: function formData() {
       this.form = {
         uid: this.admin.id,
-        first_name: this.admin.first_name,
-        last_name: this.admin.last_name,
         username: this.admin.username,
-        email: this.admin.email,
-        password: '',
-        gender: this.admin.gender
+        email: this.admin.email
       }, this.repassword = '';
     },
     createModalfunc: function createModalfunc() {
@@ -2714,7 +2608,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 if (res.status == 200 || res.status == 201) {
                   _this.createModal = false;
 
-                  _this.s("Twitter account created successfully!");
+                  _this.s("Please visite twitter posts!");
 
                   _this.category.total++;
 
@@ -2964,8 +2858,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
 
 
 
@@ -3001,11 +2893,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         title: 'Email',
         width: 320,
         key: 'email'
-      }, {
-        title: 'Gender',
-        align: 'center',
-        width: 125,
-        slot: 'gender'
       }, {
         title: 'Action',
         minWidth: 250,
@@ -3897,12 +3784,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
-    var _this = this;
-
     return {
+      // isLoading:false,
+      user: {},
       twitterData: [],
       // allCounts:'',
       isLoading: false,
@@ -3912,28 +3804,27 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       perPage: 10,
       datacollection: null,
       columns1: [{
-        title: 'Sl.',
-        width: 150,
-        type: 'index',
-        align: 'center',
-        indexMethod: function indexMethod(row) {
-          return row._index + 1 + _this.perPage * _this.page - _this.perPage;
-        }
+        title: 'Total likes',
+        key: 'like',
+        width: 150
       }, {
-        title: 'content',
+        title: 'Twitter post id',
+        key: 'twitter_id',
+        width: 250
+      }, {
+        title: 'Status',
+        key: 'is_published',
+        width: 250
+      }, {
+        title: 'Content',
         slot: 'text',
-        width: 1000
-      } // {
-      // 	title: 'Insert time',
-      // 	key: 'created_at',
-      // 	width:400,
-      // }
-      ]
+        width: 800
+      }]
     };
   },
   methods: {
-    alltwitterData: function alltwitterData() {
-      var _this2 = this;
+    connectFacebook: function connectFacebook() {
+      var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
         var res;
@@ -3942,14 +3833,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return _this2.callApi('get', "/category/getAllTwitterPostList?page=".concat(_this2.page, "&perPage=").concat(_this2.perPage, "&str=").concat(_this2.str));
+                return _this.callApi('get', "/social/login");
 
               case 2:
                 res = _context.sent;
-
-                if (res.status == 200) {
-                  _this2.twitterData = res.data;
-                }
+                console.log(res);
 
               case 4:
               case "end":
@@ -3957,6 +3845,96 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             }
           }
         }, _callee);
+      }))();
+    },
+    alltwitterData: function alltwitterData() {
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        var res;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return _this2.callApi('get', "/category/getAllTwitterPostList?page=".concat(_this2.page, "&perPage=").concat(_this2.perPage, "&str=").concat(_this2.str));
+
+              case 2:
+                res = _context2.sent;
+
+                if (res.status == 200) {
+                  _this2.twitterData = res.data;
+                }
+
+              case 4:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }))();
+    },
+    featchTweetes: function featchTweetes() {
+      var _this3 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+        var res;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return _this3.callApi('get', "/social/featchTweetes");
+
+              case 2:
+                res = _context3.sent;
+
+                if (res.status == 200) {// this.twitterData = res.data;
+                }
+
+                console.log(res);
+
+              case 5:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
+      }))();
+    },
+    postInstagramForFirstTime: function postInstagramForFirstTime() {
+      var _this4 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+        var res;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                // this.isLoading = true
+                // return 
+                _this4.isLoading = true;
+                _context4.next = 3;
+                return _this4.callApi('get', "/social/postInstagramForFirstTime");
+
+              case 3:
+                res = _context4.sent;
+                _this4.isLoading = false;
+
+                if (res.status == 200) {
+                  if (!_this4.$store.state.authUser.is_ins_scheduled) {
+                    _this4.$store.state.authUser.is_ins_scheduled = 1;
+                  }
+                }
+
+                console.log(res);
+
+              case 7:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
       }))();
     },
     serchResetlt: lodash__WEBPACK_IMPORTED_MODULE_1___default().debounce(function () {
@@ -3967,48 +3945,75 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.perPage = e;
       this.paginateDataInfo(1);
     },
+    getUser: function getUser() {
+      var _this5 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
+        var res;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                _context5.next = 2;
+                return _this5.callApi('get', "/social/getUser");
+
+              case 2:
+                res = _context5.sent;
+
+                if (res.status == 200) {
+                  _this5.user = res.data;
+                }
+
+              case 4:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5);
+      }))();
+    },
     paginateDataInfo: function paginateDataInfo(e) {
       this.page = e;
       this.alltwitterData();
     },
     deleteCategory: function deleteCategory(cat, i) {
-      var _this3 = this;
+      var _this6 = this;
 
       this.$Modal.confirm({
         title: 'Message',
         content: '<p>Are you sure to delete this Twitter account ?</p>',
         onOk: function () {
-          var _onOk = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+          var _onOk = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6() {
             var obj, res;
-            return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+            return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
               while (1) {
-                switch (_context2.prev = _context2.next) {
+                switch (_context6.prev = _context6.next) {
                   case 0:
                     obj = {
                       cat_id: cat.id
                     };
-                    _context2.next = 3;
-                    return _this3.callApi('post', "/category/deleteCategory/", obj);
+                    _context6.next = 3;
+                    return _this6.callApi('post', "/category/deleteCategory/", obj);
 
                   case 3:
-                    res = _context2.sent;
+                    res = _context6.sent;
 
                     if (res.status == 200) {
-                      _this3.s('Twitter account deleted successfully !!');
+                      _this6.s('Twitter account deleted successfully !!');
 
-                      _this3.twitterData.data.splice(i, 1);
+                      _this6.twitterData.data.splice(i, 1);
 
-                      _this3.twitterData.total--;
+                      _this6.twitterData.total--;
                     } else {
-                      _this3.swr();
+                      _this6.swr();
                     }
 
                   case 5:
                   case "end":
-                    return _context2.stop();
+                    return _context6.stop();
                 }
               }
-            }, _callee2);
+            }, _callee6);
           }));
 
           function onOk() {
@@ -4022,21 +4027,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
   },
   created: function created() {
-    var _this4 = this;
+    var _this7 = this;
 
-    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee7() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee7$(_context7) {
         while (1) {
-          switch (_context3.prev = _context3.next) {
+          switch (_context7.prev = _context7.next) {
             case 0:
-              _this4.alltwitterData();
+              _this7.alltwitterData();
 
-            case 1:
+              _this7.getUser();
+
+            case 2:
             case "end":
-              return _context3.stop();
+              return _context7.stop();
           }
         }
-      }, _callee3);
+      }, _callee7);
     }))();
   }
 });
@@ -4062,6 +4069,10 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
+//
+//
 //
 //
 //
@@ -4864,6 +4875,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -4895,13 +4907,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 flag = 1;
 
-                if (!_this.form.email || _this.form.email.trim() == '' || _this.form.email == null) {
-                  _this.error.email = 'Email is required!';
+                if (!_this.form.username || _this.form.username.trim() == '' || _this.form.username == null) {
+                  _this.error.username = 'Full name is required!';
                   flag = 0;
                 }
 
-                if (!_this.form.username || _this.form.username.trim() == '' || _this.form.username == null) {
-                  _this.error.username = 'Full name is required!';
+                if (!_this.form.email || _this.form.email.trim() == '' || _this.form.email == null) {
+                  _this.error.email = 'Email is required!';
                   flag = 0;
                 }
 
@@ -4944,7 +4956,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                   _this.clearData2();
 
-                  window.location.reload();
+                  window.location = '/';
                 }
 
                 _this.isLoading = false;
@@ -5244,11 +5256,8 @@ vue__WEBPACK_IMPORTED_MODULE_0__["default"].use(vue_router__WEBPACK_IMPORTED_MOD
 
 
 
-var mainRoutes = [{
-  path: '/',
-  component: _components_index__WEBPACK_IMPORTED_MODULE_2__["default"],
-  name: 'index'
-}, {
+var mainRoutes = [// { path: '/', component: index, name: 'index'},
+{
   path: '/register',
   component: _components_register__WEBPACK_IMPORTED_MODULE_3__["default"],
   name: 'register'
@@ -92779,7 +92788,7 @@ var render = function () {
                     attrs: { icon: "md-add", type: "primary" },
                     on: { click: _vm.createModalfunc },
                   },
-                  [_vm._v("Create Admin")]
+                  [_vm._v("Create User")]
                 ),
               ],
             ],
@@ -92795,7 +92804,7 @@ var render = function () {
             draggable: "",
             "class-name": "vertical-center-modal",
             scrollable: "",
-            title: "Create New Admin",
+            title: "Create New User",
           },
           model: {
             value: _vm.createModal,
@@ -92812,74 +92821,6 @@ var render = function () {
             [
               _c("Form", [
                 _c("div", { staticClass: "row" }, [
-                  _c(
-                    "div",
-                    { staticClass: "col-12 col-md-6 col-lg-6" },
-                    [
-                      _c(
-                        "FormItem",
-                        { attrs: { error: _vm.error.first_name } },
-                        [
-                          _c("Input", {
-                            attrs: {
-                              size: "large",
-                              type: "text",
-                              placeholder: "First Name",
-                            },
-                            nativeOn: {
-                              keyup: function ($event) {
-                                _vm.error.first_name = ""
-                              },
-                            },
-                            model: {
-                              value: _vm.form.first_name,
-                              callback: function ($$v) {
-                                _vm.$set(_vm.form, "first_name", $$v)
-                              },
-                              expression: "form.first_name",
-                            },
-                          }),
-                        ],
-                        1
-                      ),
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "col-12 col-md-6 col-lg-6" },
-                    [
-                      _c(
-                        "FormItem",
-                        { attrs: { error: _vm.error.last_name } },
-                        [
-                          _c("Input", {
-                            attrs: {
-                              size: "large",
-                              type: "text",
-                              placeholder: "Last Name",
-                            },
-                            nativeOn: {
-                              keyup: function ($event) {
-                                _vm.error.last_name = ""
-                              },
-                            },
-                            model: {
-                              value: _vm.form.last_name,
-                              callback: function ($$v) {
-                                _vm.$set(_vm.form, "last_name", $$v)
-                              },
-                              expression: "form.last_name",
-                            },
-                          }),
-                        ],
-                        1
-                      ),
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
                   _c(
                     "div",
                     { staticClass: "col-12 col-md-12 col-lg-12" },
@@ -93018,52 +92959,6 @@ var render = function () {
                     1
                   ),
                 ]),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "col-12 col-md-12 col-lg-12" },
-                  [
-                    _c(
-                      "FormItem",
-                      { attrs: { error: _vm.error.gender } },
-                      [
-                        _c(
-                          "RadioGroup",
-                          {
-                            on: {
-                              "on-change": function ($event) {
-                                _vm.error.gender = ""
-                              },
-                            },
-                            model: {
-                              value: _vm.form.gender,
-                              callback: function ($$v) {
-                                _vm.$set(_vm.form, "gender", $$v)
-                              },
-                              expression: "form.gender",
-                            },
-                          },
-                          [
-                            _c("Radio", { attrs: { label: "MALE" } }, [
-                              _c("span", [_vm._v("Male")]),
-                            ]),
-                            _vm._v(" "),
-                            _c("Radio", { attrs: { label: "FEMALE" } }, [
-                              _c("span", [_vm._v("Female")]),
-                            ]),
-                            _vm._v(" "),
-                            _c("Radio", { attrs: { label: "OTHER" } }, [
-                              _c("span", [_vm._v("Others")]),
-                            ]),
-                          ],
-                          1
-                        ),
-                      ],
-                      1
-                    ),
-                  ],
-                  1
-                ),
               ]),
             ],
             1
@@ -93086,7 +92981,7 @@ var render = function () {
                 },
                 [
                   _vm._v(
-                    _vm._s(_vm.isLoading ? "Please wait . . ." : "Create Admin")
+                    _vm._s(_vm.isLoading ? "Please wait . . ." : "Create User")
                   ),
                 ]
               ),
@@ -93154,7 +93049,7 @@ var render = function () {
             draggable: "",
             "class-name": "vertical-center-modal",
             scrollable: "",
-            title: "Edit Admin",
+            title: "Edit User",
           },
           model: {
             value: _vm.createModal,
@@ -93171,74 +93066,6 @@ var render = function () {
             [
               _c("Form", [
                 _c("div", { staticClass: "row" }, [
-                  _c(
-                    "div",
-                    { staticClass: "col-12 col-md-6 col-lg-6" },
-                    [
-                      _c(
-                        "FormItem",
-                        { attrs: { error: _vm.error.first_name } },
-                        [
-                          _c("Input", {
-                            attrs: {
-                              size: "large",
-                              type: "text",
-                              placeholder: "First Name",
-                            },
-                            nativeOn: {
-                              keyup: function ($event) {
-                                _vm.error.first_name = ""
-                              },
-                            },
-                            model: {
-                              value: _vm.form.first_name,
-                              callback: function ($$v) {
-                                _vm.$set(_vm.form, "first_name", $$v)
-                              },
-                              expression: "form.first_name",
-                            },
-                          }),
-                        ],
-                        1
-                      ),
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "col-12 col-md-6 col-lg-6" },
-                    [
-                      _c(
-                        "FormItem",
-                        { attrs: { error: _vm.error.last_name } },
-                        [
-                          _c("Input", {
-                            attrs: {
-                              size: "large",
-                              type: "text",
-                              placeholder: "Last Name",
-                            },
-                            nativeOn: {
-                              keyup: function ($event) {
-                                _vm.error.last_name = ""
-                              },
-                            },
-                            model: {
-                              value: _vm.form.last_name,
-                              callback: function ($$v) {
-                                _vm.$set(_vm.form, "last_name", $$v)
-                              },
-                              expression: "form.last_name",
-                            },
-                          }),
-                        ],
-                        1
-                      ),
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
                   _c(
                     "div",
                     { staticClass: "col-12 col-md-12 col-lg-12" },
@@ -93306,123 +93133,7 @@ var render = function () {
                     ],
                     1
                   ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "col-12 col-md-6 col-lg-6" },
-                    [
-                      _c(
-                        "FormItem",
-                        { attrs: { error: _vm.error.password } },
-                        [
-                          _c("Input", {
-                            attrs: {
-                              type: "password",
-                              size: "large",
-                              password: "",
-                              placeholder: "Password",
-                            },
-                            nativeOn: {
-                              keyup: function ($event) {
-                                _vm.error.password = ""
-                              },
-                            },
-                            model: {
-                              value: _vm.form.password,
-                              callback: function ($$v) {
-                                _vm.$set(_vm.form, "password", $$v)
-                              },
-                              expression: "form.password",
-                            },
-                          }),
-                        ],
-                        1
-                      ),
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "col-12 col-md-6 col-lg-6" },
-                    [
-                      _c(
-                        "FormItem",
-                        { attrs: { error: _vm.error.repassword } },
-                        [
-                          _c("Input", {
-                            attrs: {
-                              type: "password",
-                              size: "large",
-                              password: "",
-                              placeholder: "Confirm Password",
-                            },
-                            nativeOn: {
-                              keyup: function ($event) {
-                                _vm.error.repassword = ""
-                              },
-                            },
-                            model: {
-                              value: _vm.repassword,
-                              callback: function ($$v) {
-                                _vm.repassword = $$v
-                              },
-                              expression: "repassword",
-                            },
-                          }),
-                        ],
-                        1
-                      ),
-                    ],
-                    1
-                  ),
                 ]),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "col-12 col-md-12 col-lg-12" },
-                  [
-                    _c(
-                      "FormItem",
-                      { attrs: { error: _vm.error.gender } },
-                      [
-                        _c(
-                          "RadioGroup",
-                          {
-                            on: {
-                              "on-change": function ($event) {
-                                _vm.error.gender = ""
-                              },
-                            },
-                            model: {
-                              value: _vm.form.gender,
-                              callback: function ($$v) {
-                                _vm.$set(_vm.form, "gender", $$v)
-                              },
-                              expression: "form.gender",
-                            },
-                          },
-                          [
-                            _c("Radio", { attrs: { label: "MALE" } }, [
-                              _c("span", [_vm._v("Male")]),
-                            ]),
-                            _vm._v(" "),
-                            _c("Radio", { attrs: { label: "FEMALE" } }, [
-                              _c("span", [_vm._v("Female")]),
-                            ]),
-                            _vm._v(" "),
-                            _c("Radio", { attrs: { label: "OTHER" } }, [
-                              _c("span", [_vm._v("Others")]),
-                            ]),
-                          ],
-                          1
-                        ),
-                      ],
-                      1
-                    ),
-                  ],
-                  1
-                ),
               ]),
             ],
             1
@@ -93444,7 +93155,7 @@ var render = function () {
                 },
                 [
                   _vm._v(
-                    _vm._s(_vm.isLoading ? "Please wait . . ." : "Edit Admin")
+                    _vm._s(_vm.isLoading ? "Please wait . . ." : "Edit User")
                   ),
                 ]
               ),
@@ -93600,7 +93311,7 @@ var render = function () {
                     _vm._s(
                       _vm.isLoading
                         ? "Please wait . . ."
-                        : "Add twitter account"
+                        : "Add twitter account and featch twitits"
                     )
                   ),
                 ]
@@ -93807,12 +93518,12 @@ var render = function () {
               { attrs: { "show-icon": "" } },
               [
                 _c("span", { staticStyle: { "font-weight": "bold" } }, [
-                  _vm._v(" Total admins : " + _vm._s(_vm.admins.total)),
+                  _vm._v(" Total users : " + _vm._s(_vm.admins.total)),
                 ]),
                 _vm._v(" "),
                 _c("template", { slot: "desc" }, [
                   _vm._v(
-                    "All admins with search, create, edit and delete options."
+                    "All users with search, create, edit and delete options."
                   ),
                 ]),
               ],
@@ -93828,30 +93539,7 @@ var render = function () {
               "div",
               { staticClass: "_1card_top _mar_b20" },
               [
-                _c("div", { staticClass: "_1card_top_left" }, [
-                  _c(
-                    "div",
-                    { staticClass: "_1card_top_search" },
-                    [
-                      _c("Input", {
-                        attrs: {
-                          suffix: "ios-search",
-                          placeholder:
-                            "Search admins by name, email, user & ...",
-                        },
-                        on: { "on-change": _vm.serchResetlt },
-                        model: {
-                          value: _vm.str,
-                          callback: function ($$v) {
-                            _vm.str = $$v
-                          },
-                          expression: "str",
-                        },
-                      }),
-                    ],
-                    1
-                  ),
-                ]),
+                _c("div", { staticClass: "_1card_top_left" }),
                 _vm._v(" "),
                 _c("createAdmin", { attrs: { admin: _vm.admins } }),
               ],
@@ -93873,15 +93561,7 @@ var render = function () {
                       key: "name",
                       fn: function (ref) {
                         var row = ref.row
-                        return [
-                          _c("p", [
-                            _vm._v(
-                              _vm._s(row.first_name) +
-                                " " +
-                                _vm._s(row.last_name)
-                            ),
-                          ]),
-                        ]
+                        return [_c("p", [_vm._v(_vm._s(row.username) + " ")])]
                       },
                     },
                     {
@@ -93889,13 +93569,6 @@ var render = function () {
                       fn: function (ref) {
                         var row = ref.row
                         return [_c("p", [_vm._v(_vm._s(row.email))])]
-                      },
-                    },
-                    {
-                      key: "gender",
-                      fn: function (ref) {
-                        var row = ref.row
-                        return [_c("p", [_vm._v(_vm._s(row.gender))])]
                       },
                     },
                     {
@@ -93985,14 +93658,8 @@ var render = function () {
               "Alert",
               { attrs: { "show-icon": "" } },
               [
-                _c("span", { staticStyle: { "font-weight": "bold" } }, [
-                  _vm._v(" Total Twitter : " + _vm._s(_vm.twitterData.total)),
-                ]),
-                _vm._v(" "),
                 _c("template", { slot: "desc" }, [
-                  _vm._v(
-                    "All twitter with search, create, edit and delete options."
-                  ),
+                  _vm._v("Twitter user name."),
                 ]),
               ],
               2
@@ -94007,31 +93674,11 @@ var render = function () {
               "div",
               { staticClass: "_1card_top _mar_b20" },
               [
-                _c("div", { staticClass: "_1card_top_left" }, [
-                  _c(
-                    "div",
-                    { staticClass: "_1card_top_search" },
-                    [
-                      _c("Input", {
-                        attrs: {
-                          suffix: "ios-search",
-                          placeholder: "Search twiter by name ...",
-                        },
-                        on: { "on-change": _vm.serchResetlt },
-                        model: {
-                          value: _vm.str,
-                          callback: function ($$v) {
-                            _vm.str = $$v
-                          },
-                          expression: "str",
-                        },
-                      }),
-                    ],
-                    1
-                  ),
-                ]),
+                _vm._m(0),
                 _vm._v(" "),
-                _c("addCategory", { attrs: { category: _vm.twitterData } }),
+                !_vm.twitterData.data || _vm.twitterData.data.length <= 0
+                  ? _c("addCategory", { attrs: { category: _vm.twitterData } })
+                  : _vm._e(),
               ],
               1
             ),
@@ -94113,7 +93760,16 @@ var render = function () {
     ]),
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "_1card_top_left" }, [
+      _c("div", { staticClass: "_1card_top_search" }),
+    ])
+  },
+]
 render._withStripped = true
 
 
@@ -94664,14 +94320,10 @@ var render = function () {
               { attrs: { "show-icon": "" } },
               [
                 _c("span", { staticStyle: { "font-weight": "bold" } }, [
-                  _vm._v(" Total Twitter : " + _vm._s(_vm.twitterData.total)),
+                  _vm._v(" Total tweets : " + _vm._s(_vm.twitterData.total)),
                 ]),
                 _vm._v(" "),
-                _c("template", { slot: "desc" }, [
-                  _vm._v(
-                    "All twitter with search, create, edit and delete options."
-                  ),
-                ]),
+                _c("template", { slot: "desc" }, [_vm._v("All tweets.")]),
               ],
               2
             ),
@@ -94687,20 +94339,38 @@ var render = function () {
                   "div",
                   { staticClass: "_1card_top_search" },
                   [
-                    _c("Input", {
-                      attrs: {
-                        suffix: "ios-search",
-                        placeholder: "Search twiter by name ...",
-                      },
-                      on: { "on-change": _vm.serchResetlt },
-                      model: {
-                        value: _vm.str,
-                        callback: function ($$v) {
-                          _vm.str = $$v
-                        },
-                        expression: "str",
-                      },
-                    }),
+                    !_vm.$store.state.authUser.is_connected
+                      ? _c(
+                          "a",
+                          { attrs: { href: "/social/login" } },
+                          [_c("Button", [_vm._v("Connect")])],
+                          1
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.twitterData &&
+                    _vm.twitterData.data &&
+                    _vm.twitterData.data.length > 0 &&
+                    !_vm.$store.state.authUser.is_ins_scheduled &&
+                    !_vm.isLoading
+                      ? _c(
+                          "Button",
+                          { on: { click: _vm.postInstagramForFirstTime } },
+                          [_vm._v("Schedule instagram post")]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.isLoading
+                      ? _c("Button", [_vm._v(" Loading..")])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    !_vm.twitterData ||
+                    !_vm.twitterData.data ||
+                    _vm.twitterData.data.length == 0
+                      ? _c("Button", { on: { click: _vm.featchTweetes } }, [
+                          _vm._v("Fetch popular twitter post"),
+                        ])
+                      : _vm._e(),
                   ],
                   1
                 ),
@@ -95100,45 +94770,17 @@ var render = function () {
                             [
                               _c(
                                 "MenuItem",
-                                { attrs: { to: "/", name: "index" } },
-                                [
-                                  _c("Icon", { attrs: { type: "md-home" } }),
-                                  _vm._v(" "),
-                                  _c("span", { staticClass: "submenu_text" }, [
-                                    _vm._v("Home"),
-                                  ]),
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "MenuItem",
-                                { attrs: { to: "/admin", name: "admin" } },
-                                [
-                                  _c("Icon", {
-                                    attrs: { type: "ios-contacts" },
-                                  }),
-                                  _vm._v(" "),
-                                  _c("span", { staticClass: "submenu_text" }, [
-                                    _vm._v("Admin"),
-                                  ]),
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "MenuItem",
                                 {
                                   attrs: {
-                                    to: "/categories",
-                                    name: "categories",
+                                    to: "/twitter_users",
+                                    name: "twitter_users",
                                   },
                                 },
                                 [
                                   _c("Icon", { attrs: { type: "ios-apps" } }),
                                   _vm._v(" "),
                                   _c("span", { staticClass: "submenu_text" }, [
-                                    _vm._v("Categories"),
+                                    _vm._v("Twitter Users"),
                                   ]),
                                 ],
                                 1
@@ -95505,7 +95147,7 @@ var render = function () {
                             },
                           },
                         },
-                        [_vm._v("Signin")]
+                        [_vm._v("Log In")]
                       ),
                     ],
                     1
@@ -95522,7 +95164,7 @@ var render = function () {
               "p",
               { staticClass: "_login_do" },
               [
-                _vm._v(" Create?  "),
+                _vm._v(" Create New Account?  "),
                 _c(
                   "router-link",
                   { staticClass: "_3link _mar_l5", attrs: { to: "/register" } },
@@ -95631,6 +95273,37 @@ var render = function () {
                 [
                   _c(
                     "FormItem",
+                    { attrs: { prop: "password", error: _vm.error.fullName } },
+                    [
+                      _c(
+                        "Input",
+                        {
+                          attrs: { size: "large", placeholder: "Full name" },
+                          model: {
+                            value: _vm.form.username,
+                            callback: function ($$v) {
+                              _vm.$set(_vm.form, "username", $$v)
+                            },
+                            expression: "form.username",
+                          },
+                        },
+                        [
+                          _c("Icon", {
+                            attrs: {
+                              slot: "prepend",
+                              type: "ios-person-outline",
+                            },
+                            slot: "prepend",
+                          }),
+                        ],
+                        1
+                      ),
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "FormItem",
                     { attrs: { prop: "user", error: _vm.error.email } },
                     [
                       _c(
@@ -95639,7 +95312,7 @@ var render = function () {
                           attrs: {
                             size: "large",
                             type: "text",
-                            placeholder: "email",
+                            placeholder: "Email",
                           },
                           model: {
                             value: _vm.form.email,
@@ -95701,41 +95374,6 @@ var render = function () {
                   _vm._v(" "),
                   _c(
                     "FormItem",
-                    { attrs: { prop: "password", error: _vm.error.fullName } },
-                    [
-                      _c(
-                        "Input",
-                        {
-                          attrs: {
-                            size: "large",
-                            type: "password",
-                            placeholder: "fullName",
-                          },
-                          model: {
-                            value: _vm.form.username,
-                            callback: function ($$v) {
-                              _vm.$set(_vm.form, "username", $$v)
-                            },
-                            expression: "form.username",
-                          },
-                        },
-                        [
-                          _c("Icon", {
-                            attrs: {
-                              slot: "prepend",
-                              type: "ios-lock-outline",
-                            },
-                            slot: "prepend",
-                          }),
-                        ],
-                        1
-                      ),
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "FormItem",
                     [
                       _c(
                         "Button",
@@ -95751,7 +95389,7 @@ var render = function () {
                             },
                           },
                         },
-                        [_vm._v("Signin")]
+                        [_vm._v("Register")]
                       ),
                     ],
                     1
@@ -95790,7 +95428,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "_login_top _1border_color" }, [
       _c("p", { staticClass: "_login_top_text" }, [
-        _vm._v("register your account"),
+        _vm._v("Register your account"),
       ]),
     ])
   },

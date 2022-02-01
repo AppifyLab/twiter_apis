@@ -16,7 +16,10 @@ class CreateCategoriesTable extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->string('username', 199);
+            
             $table->string('next_token', 199)->nullable();
+            $table->string('twitter_user_id', 199)->nullable();
+            $table->integer('is_first_call_done')->default(0);
             $table->timestamps();
         });
     }
