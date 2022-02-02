@@ -53,7 +53,13 @@ class Customhelper
     public function uploadImageToInstagram($bussness_id,$accessToken){
         $params = array( 
             'image_url' => 'https://inst.appifylab.com/img/converted.jpeg',
-            'caption' => "testing ..",
+            'caption' => "Testing twitter to instagram.
+            
+            
+            
+            
+            #code #coding #sadek #appifylab #kamran
+            ",
             'access_token' => $accessToken
         );
         $response =  $this->sendCurlPostRequest("$bussness_id/media", $params);
