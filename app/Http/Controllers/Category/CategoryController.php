@@ -71,7 +71,7 @@ class CategoryController extends Controller
 
     public function featchTweetes($single_twitter_users){
         try {
-            $limit = 5;
+            $limit = 25;
             $user_name = $single_twitter_users->username;
             $user_id= $single_twitter_users->user_id;
             $client2 = new \GuzzleHttp\Client();
