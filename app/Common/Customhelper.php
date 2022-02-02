@@ -3,6 +3,8 @@
 namespace App\Common;
 use App\Models\Twitter;
 use App\Models\User;
+use App\Models\Category;
+use Carbon\Carbon;
 class Customhelper
 {
     public function processImageAndUploadInstagram($data){
@@ -152,6 +154,48 @@ class Customhelper
                 }
             }
 
+    }
+
+
+    public function getAllTweets(){
+        $all_twetter_users =  Category::select('id','twitter_user_id','last_updatetime','user_id')->get();
+        foreach($all_twetter_users as $key => $user ){
+            $tdate = Carbon::now();
+            $end_time =$tdate->format('Y-m-d\TH:i:s\Z');
+            $start_time = $user['last_updatetime'];
+
+            \Log::info(['st'=>$start_time,'end'=>$end_time]);
+           
+            Category::select('id',$user['id'])->update(['last_updatetime'=>$end_time]);
+           
+            $limit = 25;
+            $client2 = new \GuzzleHttp\Client();
+            $url = 'https://api.twitter.com/2/users/'.$user->twitter_user_id.'/tweets?tweet.fields=public_metrics,entities,attachments,created_at&max_results='. $limit.'&start_time='.$start_time.'&end_time='.$end_time;
+            $request2 = (string) $client2->get($url,
+            ['headers' => 
+                [
+                    'Authorization' => "Bearer AAAAAAAAAAAAAAAAAAAAAOWNYgEAAAAAD1NQJpQfL98Al2lJAYWojnmeOJY%3D9tOPIa1RUfdwVOfrEqSUw0Hmr9v6RWxyES06AcwAY3dXvkUdM6"
+                ]
+            ]
+            )->getBody();
+
+            $alldata =json_decode($request2);
+           
+
+            if(isset($alldata->meta) && isset($alldata->meta->result_count)){
+                if($alldata->meta->result_count==0) {
+                    \Log::info("false");
+                    return false;
+                }
+            }
+            \Log::info(['all'=>$alldata]);
+
+           
+            $data = $alldata->data;
+            // \Log::info(['all'=>$alldata]);
+            $this->insertTweetIntoTheDatabase($data,$user);
+            
+        }
     }
 
    
