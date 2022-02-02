@@ -64,7 +64,7 @@ class CategoryController extends Controller
         }
 
         $single_twitter_users = $this->categoryService->addCategory($data);
-         return $this->featchTweetes($single_twitter_users);
+          $this->featchTweetes($single_twitter_users);
          return $single_twitter_users;
 
     }
