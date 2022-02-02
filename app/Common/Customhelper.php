@@ -158,7 +158,9 @@ class Customhelper
 
 
     public function getAllTweets(){
+        \Log::info("getAllTweets");
         $all_twetter_users =  Category::select('id','twitter_user_id','last_updatetime','user_id')->get();
+        \Log::info(['s'=>$all_twetter_users]);
         foreach($all_twetter_users as $key => $user ){
             $tdate = Carbon::now();
             $end_time =$tdate->format('Y-m-d\TH:i:s\Z');
