@@ -7,6 +7,7 @@ use App\Jobs\FetchingPost;
 use App\Models\User;
 use App\Models\Twitter;
 use App\Models\Category;
+use App\Common\Customhelper;
 use Carbon\Carbon;
 class FeatchingTweets extends Command
 {
@@ -16,6 +17,7 @@ class FeatchingTweets extends Command
      * @var string
      */
     protected $signature = 'command:FeatchingTweets';
+    private $customHelper;
     /**
      * The console command description.
      *
@@ -28,9 +30,10 @@ class FeatchingTweets extends Command
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Customhelper $customHelper)
     {
         parent::__construct();
+        $this->customHelper = $customHelper;
     }
 
     /**
@@ -38,36 +41,19 @@ class FeatchingTweets extends Command
      *
      * @return int
      */
-    public  function sortArrayByName($inputArr) {
-
-        $n = sizeof($inputArr);
-        for ($i = 1; $i < $n; $i++) {
-            // Choosing the first element in our unsorted subarray
-            $current = $inputArr[$i];
-            $like = $inputArr[$i]['like'];
-            // return 1;
-            // The last element of our sorted subarray
-            $j = $i-1;
-
-            while (($j > -1) && isset($inputArr[$j]['like']) && ($like > $inputArr[$j]['like'])) {
-                $inputArr[$j+1] = $inputArr[$j];
-                $j--;
-            }
-            $inputArr[$j+1] = $current;
-        }
-        return $inputArr;
-        
-    }
+ 
     public function handle()
     {
-        $all_twetter_users =  Category::select('id','twitter_user_id','last_updatetime','user_id')->get();
+         $all_twetter_users =  Category::select('id','twitter_user_id','last_updatetime','user_id')->get();
         foreach($all_twetter_users as $key => $user ){
             $tdate = Carbon::now();
             $end_time =$tdate->format('Y-m-d\TH:i:s\Z');
             $start_time = $user['last_updatetime'];
-            
-            Category::select('id',$user['id'])->update(['last_updatetime'=>$end_time]);
 
+            \Log::info(['st'=>$start_time,'end'=>$end_time]);
+           
+            Category::select('id',$user['id'])->update(['last_updatetime'=>$end_time]);
+           
             $limit = 25;
             $client2 = new \GuzzleHttp\Client();
             $url = 'https://api.twitter.com/2/users/'.$user->twitter_user_id.'/tweets?tweet.fields=public_metrics,entities,attachments,created_at&max_results='. $limit.'&start_time='.$start_time.'&end_time='.$end_time;
@@ -80,6 +66,7 @@ class FeatchingTweets extends Command
             )->getBody();
 
             $alldata =json_decode($request2);
+           
 
             if(isset($alldata->meta) && isset($alldata->meta->result_count)){
                 if($alldata->meta->result_count==0) {
@@ -87,43 +74,13 @@ class FeatchingTweets extends Command
                     return false;
                 }
             }
+            \Log::info(['all'=>$alldata]);
 
+           
             $data = $alldata->data;
-            $array_data = [];
-            foreach($data as $key => $value){
-               
-                if(isset($value) && isset($value->entities) && isset($value->entities->urls[0]) && isset($value->entities->urls[0]->url)){
-                    continue;
-                    // $value->text = str_replace( $value->entities->urls[0]->url, '', $value->text);
-                }
-                if(isset($value) && isset($value->attachments)){
-                    continue;
-                }
-
-                $like = 0;
-                if($value->public_metrics){
-                   if(isset($value->public_metrics->like_count)){
-                        $like =$value->public_metrics->like_count;
-                    }
-                }
-                \Log::info(['twits'=>$value]);
-                array_push($array_data,[
-                    'user_id'=>$user['user_id'],
-                    'text'=>$value->text,
-                    'twitter_id'=>$value->id,
-                    'like'=>$like,
-                    'create_time'=>$value->created_at
-                ]); 
-            }
-            $sorted_array = $this->sortArrayByName($array_data);
-            $i=0;
-            foreach($array_data as $key => $value){
-                FetchingPost::dispatch($value);
-                $i++;
-                if($i>25){
-                    break;
-                }
-            }
+            // \Log::info(['all'=>$alldata]);
+            $this->customHelper->insertTweetIntoTheDatabase($data,$user);
+            // return ;
             return "sucess";
 
             

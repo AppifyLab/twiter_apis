@@ -7,16 +7,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Jobs\FetchingPost;
 use Carbon\Carbon;
+use App\Common\Customhelper;
 use App\Http\Controllers\Social\SocialController;
 class CategoryController extends Controller
 {
 
     private $categoryService;
     private $socialService;
-    public function __construct(CategoryService $categoryService,SocialController $socialService)
+    private $customHelper;
+    public function __construct(CategoryService $categoryService,SocialController $socialService ,Customhelper $customHelper)
     {
         $this->categoryService = $categoryService;
         $this->socialService = $socialService;
+        $this->customHelper = $customHelper;
     }
     public function test(){
         $tdate = Carbon::now();
@@ -61,8 +64,7 @@ class CategoryController extends Controller
         }
 
         $single_twitter_users = $this->categoryService->addCategory($data);
-        return $this->featchTweetes($single_twitter_users);
-
+         return $this->featchTweetes($single_twitter_users);
          return $single_twitter_users;
 
     }
@@ -85,7 +87,6 @@ class CategoryController extends Controller
             $client2 = new \GuzzleHttp\Client();
             $url = 'https://api.twitter.com/2/users/'.$user_data->data->id.'/tweets?tweet.fields=public_metrics,attachments,entities,created_at&max_results='. $limit;
             
-            
             $this->categoryService->updateTwites(['id'=>$single_twitter_users['id'],'twitter_user_id'=>$user_data->data->id]);
            
 
@@ -103,44 +104,7 @@ class CategoryController extends Controller
                 ], 401);
             }
             $data = $alldata->data;
-            
-            $array_data = [];
-            foreach($data as $key => $value){
-                if(isset($value) && isset($value->entities) && isset($value->entities->urls[0]) && isset($value->entities->urls[0]->url)){
-                    // $value->text = str_replace( $value->entities->urls[0]->url, '', $value->text);
-                    continue;
-                }
-                if(isset($value) && isset($value->attachments)){
-                    continue;
-                }
-                $like = 0;
-                if($value->public_metrics){
-                   if(isset($value->public_metrics->like_count)){
-                        $like =$value->public_metrics->like_count;
-                    }
-                }
-               
-                array_push($array_data,[
-                    'user_id'=>$single_twitter_users['user_id'],
-                    'text'=>$value->text,
-                    'twitter_id'=>$value->id,
-                    'like'=>$like,
-                    'create_time'=>$value->created_at
-                ]);   
-            }
-            $sorted_array = $this->sortArrayByName($array_data);
-            $i =1;
-            foreach($array_data as $key => $value){
-                FetchingPost::dispatch($value);
-                $i++;
-                if($i>25){
-                    break;
-                }
-
-
-            }
-
-            
+            $this->customHelper->insertTweetIntoTheDatabase($data,$single_twitter_users);
             return "sucess";
         } catch (\Exception $e) {
             return $e;
