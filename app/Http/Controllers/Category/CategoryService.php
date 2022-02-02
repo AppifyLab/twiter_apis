@@ -121,7 +121,7 @@ class CategoryService
         return $this->categoryQuery->deleteCategory($data);
     }
     public function getAlltwitterData($data){
-      $data['user_id'] =  Auth::id();
+      $data['user_id'] =  Auth::user()->id;
         return $this->categoryQuery->getAlltwitterData($data);
     }
     public function getAllTwitterPostList($data){

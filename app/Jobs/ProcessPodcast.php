@@ -74,8 +74,7 @@ class ProcessPodcast implements ShouldQueue
     public function handle()
     {
 
-        // try {
-        $link = $this->imageProcess($this->data->post->text);
+       
         $id = $this->data->bussness_id;
         
         $endpoint = "https://graph.facebook.com/v5.0/$id/media";
@@ -115,7 +114,7 @@ class ProcessPodcast implements ShouldQueue
 		$response = curl_exec( $ch );
 		curl_close( $ch );
 
-        Twitter::where('id', $this->data->post->id)->update(['is_published'=>"Complited"]);
+        Twitter::where('id', $this->data->id)->update(['is_published'=>"Complited"]);
 
         
         // } catch (\Throwable $th) {

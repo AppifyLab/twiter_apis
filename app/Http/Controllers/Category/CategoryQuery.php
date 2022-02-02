@@ -46,7 +46,7 @@ class CategoryQuery
     public function getAlltwitterData($data){
         $str = $data["str"] ?? null;
         $str = "%".$str."%";
-        return Category::when($str, function($q) use($str){
+        return Category::where('user_id',$data['user_id'])->when($str, function($q) use($str){
             $q->where('username', 'like', $str);
         })->orderByDesc('id')->paginate(10);
     }

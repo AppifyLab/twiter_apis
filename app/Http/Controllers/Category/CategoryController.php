@@ -21,9 +21,11 @@ class CategoryController extends Controller
     public function test(){
         $tdate = Carbon::now();
 
-        $date = Carbon::createFromFormat('Y-m-d H:i:s', $tdate)->format('d-m-Y');
+        $date = $tdate->format('Y-m-d\TH:i:s\Z');
+        // $date = Carbon::createFromFormat('Y-m-d H:i:s', $request->date)->format('d-m-Y');
+        $date2 =  date('Y-m-d H:i:s', strtotime('-3 minutes'));
       
-        return $date;
+        return [$date, $date2];
     }
     public function editAdminUser(Request $request){
         $data = $request->all();
@@ -81,7 +83,7 @@ class CategoryController extends Controller
             $user_data =json_decode($request1);
             $token = 100;
             $client2 = new \GuzzleHttp\Client();
-            $url = 'https://api.twitter.com/2/users/'.$user_data->data->id.'/tweets?tweet.fields=public_metrics,entities,created_at&max_results='. $limit;
+            $url = 'https://api.twitter.com/2/users/'.$user_data->data->id.'/tweets?tweet.fields=public_metrics,attachments,entities,created_at&max_results='. $limit;
             
             
             $this->categoryService->updateTwites(['id'=>$single_twitter_users['id'],'twitter_user_id'=>$user_data->data->id]);
@@ -105,7 +107,11 @@ class CategoryController extends Controller
             $array_data = [];
             foreach($data as $key => $value){
                 if(isset($value) && isset($value->entities) && isset($value->entities->urls[0]) && isset($value->entities->urls[0]->url)){
-                    $value->text = str_replace( $value->entities->urls[0]->url, '', $value->text);
+                    // $value->text = str_replace( $value->entities->urls[0]->url, '', $value->text);
+                    continue;
+                }
+                if(isset($value) && isset($value->attachments)){
+                    continue;
                 }
                 $like = 0;
                 if($value->public_metrics){

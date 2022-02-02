@@ -38,30 +38,39 @@ class FeatchingTweets extends Command
      *
      * @return int
      */
+    public  function sortArrayByName($inputArr) {
+
+        $n = sizeof($inputArr);
+        for ($i = 1; $i < $n; $i++) {
+            // Choosing the first element in our unsorted subarray
+            $current = $inputArr[$i];
+            $like = $inputArr[$i]['like'];
+            // return 1;
+            // The last element of our sorted subarray
+            $j = $i-1;
+
+            while (($j > -1) && isset($inputArr[$j]['like']) && ($like > $inputArr[$j]['like'])) {
+                $inputArr[$j+1] = $inputArr[$j];
+                $j--;
+            }
+            $inputArr[$j+1] = $current;
+        }
+        return $inputArr;
+        
+    }
     public function handle()
     {
-        \Log::info("running..1");
-        return 1;
-     
-
-        $all_twetter_users =  Category::select('id','twitter_user_id')->get();
-        try {
-
-        foreach($all_twetter_users as $key => $value ){
-
-            $date = Carbon::createFromFormat('Y-m-d H:i:s', $request->date)->format('d-m-Y');
-            // date('Y-m-d h:i:s', strtotime($date));
-            // $start_time = $date.'T00:00:00Z';
-            // $end_time = $date.'T23:59:00Z';
-
-            // // $start_time = Carbon::parse($date);
-            \Log::info(['s'=>$date]);
-            return "hello";
-            // Category::select('id',$value['id'])->update(['last_updatetime']);
+        $all_twetter_users =  Category::select('id','twitter_user_id','last_updatetime','user_id')->get();
+        foreach($all_twetter_users as $key => $user ){
+            $tdate = Carbon::now();
+            $end_time =$tdate->format('Y-m-d\TH:i:s\Z');
+            $start_time = $user['last_updatetime'];
+            
+            Category::select('id',$user['id'])->update(['last_updatetime'=>$end_time]);
 
             $limit = 25;
             $client2 = new \GuzzleHttp\Client();
-            $url = 'https://api.twitter.com/2/users/'.$value->twitter_user_id.'/tweets?tweet.fields=public_metrics,entities,created_at&max_results='. $limit.'&start_time='.$start_time.'&end_time='.$end_time;
+            $url = 'https://api.twitter.com/2/users/'.$user->twitter_user_id.'/tweets?tweet.fields=public_metrics,entities,attachments,created_at&max_results='. $limit.'&start_time='.$start_time.'&end_time='.$end_time;
             $request2 = (string) $client2->get($url,
             ['headers' => 
                 [
@@ -69,36 +78,56 @@ class FeatchingTweets extends Command
                 ]
             ]
             )->getBody();
+
             $alldata =json_decode($request2);
-            if($alldata->meta->result_count==0) {
-                return response()->json([
-                    'message' => "No result found!",
-                ], 401);
+
+            if(isset($alldata->meta) && isset($alldata->meta->result_count)){
+                if($alldata->meta->result_count==0) {
+                    \Log::info("false");
+                    return false;
+                }
             }
 
             $data = $alldata->data;
+            $array_data = [];
+            foreach($data as $key => $value){
+               
+                if(isset($value) && isset($value->entities) && isset($value->entities->urls[0]) && isset($value->entities->urls[0]->url)){
+                    continue;
+                    // $value->text = str_replace( $value->entities->urls[0]->url, '', $value->text);
+                }
+                if(isset($value) && isset($value->attachments)){
+                    continue;
+                }
 
-            FetchingPost::dispatch($data);
+                $like = 0;
+                if($value->public_metrics){
+                   if(isset($value->public_metrics->like_count)){
+                        $like =$value->public_metrics->like_count;
+                    }
+                }
+                \Log::info(['twits'=>$value]);
+                array_push($array_data,[
+                    'user_id'=>$user['user_id'],
+                    'text'=>$value->text,
+                    'twitter_id'=>$value->id,
+                    'like'=>$like,
+                    'create_time'=>$value->created_at
+                ]); 
+            }
+            $sorted_array = $this->sortArrayByName($array_data);
+            $i=0;
+            foreach($array_data as $key => $value){
+                FetchingPost::dispatch($value);
+                $i++;
+                if($i>25){
+                    break;
+                }
+            }
             return "sucess";
 
             
         }
-
-
-           
-            
-          
-        
-        
-       
-        } catch (\Exception $e) {
-            return $e;
-            return response()->json([
-                'message' => "Invalied twitter username!",
-            ], 401);
-        }
-
-
         return 0;
     }
 }

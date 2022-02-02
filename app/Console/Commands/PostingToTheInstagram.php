@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\User;
 use App\Models\Twitter;
+use App\Common\Customhelper;
 
 use App\Jobs\ProcessPodcast;
 
@@ -16,7 +17,7 @@ class PostingToTheInstagram extends Command
      * @var string
      */
     protected $signature = 'command:PostingToTheInstagram';
-
+    private $customHelper;
     /**
      * The console command description.
      *
@@ -29,9 +30,11 @@ class PostingToTheInstagram extends Command
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Customhelper $customHelper )
     {
+        
         parent::__construct();
+        $this->customHelper = $customHelper;
     }
 
     /**
@@ -41,19 +44,13 @@ class PostingToTheInstagram extends Command
      */
     public function handle()
     {
-        \Log::info("running..2");
-        return 1;
-  
-            $allposts =   User::where('is_ins_scheduled',1)->with('post')->whereHas('post')->get();
+        
+            $allposts =   User::where('is_ins_scheduled',1)->where('counter','<=',2)->with('post')->whereHas('post')->get();
             $ids = [];
             foreach ($allposts as $key => $value) {
-                if(isset($value['post'])){
-                    ProcessPodcast::dispatch($value);
-                    array_push($ids,$value['post']->id);
-                }
+                $this->customHelper->processImageAndUploadInstagram($value);
+                return 1;
             }
-            return Twitter::whereIn('id',$ids)->where('is_published','!=','Completed')->update(['is_published'=>'Processing']);
-            // $this->socialService->updateTwitesStatus($ids,'Processing');
               
           
     }
