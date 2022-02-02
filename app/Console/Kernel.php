@@ -14,14 +14,14 @@ class Kernel extends ConsoleKernel
      * @return void
      */
     protected $commands = [
-        // Commands\PostingToTheInstagram::class,
+        Commands\PostingToTheInstagram::class,
         Commands\FeatchingTweets::class,
         
     ];
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('command:PostingToTheInstagram')
-        // ->everyMinute();
+        $schedule->command('command:PostingToTheInstagram')
+        ->everyMinute();
         $schedule->command('command:FeatchingTweets')
         ->everyMinute();
         

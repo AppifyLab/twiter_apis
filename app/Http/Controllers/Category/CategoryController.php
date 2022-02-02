@@ -86,9 +86,9 @@ class CategoryController extends Controller
             $token = 100;
             $client2 = new \GuzzleHttp\Client();
             $url = 'https://api.twitter.com/2/users/'.$user_data->data->id.'/tweets?tweet.fields=public_metrics,attachments,entities,created_at&max_results='. $limit;
-            
-            $this->categoryService->updateTwites(['id'=>$single_twitter_users['id'],'twitter_user_id'=>$user_data->data->id]);
-           
+            $tdate = Carbon::now();
+            $last_updatetime = $tdate->format('Y-m-d\TH:i:s\Z');
+            $this->categoryService->updateTwites(['id'=>$single_twitter_users['id'],'twitter_user_id'=>$user_data->data->id,'last_updatetime'=>$last_updatetime]);
 
             $request2 = (string) $client2->get($url,
             ['headers' => 
