@@ -19,7 +19,7 @@
                                     <a v-if="!$store.state.authUser.is_connected" href="/social/login"><Button>Connect</Button></a>
                                     <Button v-if="twitterData && twitterData.data && twitterData.data.length>0 && !$store.state.authUser.is_ins_scheduled && !isLoading" @click="postInstagramForFirstTime">Schedule instagram post</Button>
                                     <Button v-if="isLoading"> Loading..</Button>
-                                    <Button v-if="!twitterData || !twitterData.data || twitterData.data.length==0" @click="featchTweetes">Fetch popular twitter post</Button>
+                                    <!-- <Button v-if="!twitterData || !twitterData.data || twitterData.data.length==0" @click="featchTweetes">Fetch popular twitter post</Button> -->
                                     
 								</div>
 
