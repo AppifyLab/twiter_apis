@@ -44,6 +44,7 @@ class FeatchingTweets extends Command
  
     public function handle()
     {
+        \Log::info("calling twiter");
          $all_twetter_users =  Category::select('id','twitter_user_id','last_updatetime','user_id')->get();
         foreach($all_twetter_users as $key => $user ){
             $tdate = Carbon::now();

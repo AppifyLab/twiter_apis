@@ -45,6 +45,7 @@ class PostingToTheInstagram extends Command
     public function handle()
     {
         
+        \Log::info("calling Images");
             $allposts =   User::where('is_ins_scheduled',1)->where('counter','<=',2)->with('post')->whereHas('post')->get();
             $ids = [];
             foreach ($allposts as $key => $value) {
