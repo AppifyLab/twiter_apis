@@ -52,7 +52,7 @@ class CategoryQuery
     }
 
     public function getAllTwitterPostList($data){
-       return Twitter::paginate(10);
+       return Twitter::where('user_id', $data['user_id'])->paginate(10);
     }   
     //================================ Category-End ========================================
 

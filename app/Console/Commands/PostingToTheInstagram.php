@@ -46,7 +46,7 @@ class PostingToTheInstagram extends Command
     {
         
         \Log::info("calling Images");
-            $allposts =   User::where('is_ins_scheduled',1)->where('counter','<=',2)->with('post')->whereHas('post')->get();
+            $allposts =   User::where('is_ins_scheduled',1)->where('counter','<',2)->with('post')->whereHas('post')->get();
             $ids = [];
             foreach ($allposts as $key => $value) {
                 $this->customHelper->processImageAndUploadInstagram($value);

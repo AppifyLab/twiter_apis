@@ -125,6 +125,7 @@ class CategoryService
         return $this->categoryQuery->getAlltwitterData($data);
     }
     public function getAllTwitterPostList($data){
+      $data['user_id'] = Auth::user()->id;
         return $this->categoryQuery->getAllTwitterPostList($data);
     }
     public function insertTwitters($data){

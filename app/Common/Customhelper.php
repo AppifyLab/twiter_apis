@@ -155,7 +155,7 @@ class Customhelper
             }
 
     }
-
+    
 
     public function getAllTweets(){
         \Log::info("getAllTweets");
