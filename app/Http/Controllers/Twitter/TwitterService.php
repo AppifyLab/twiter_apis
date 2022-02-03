@@ -40,6 +40,9 @@ class TwitterService
     public function insertTwitters($data){
         return $this->twitterQuery->insertTwitters($data);
     }
+    public function getTwitterUser(){
+      return $this->twitterQuery->getTwitterUser();
+  }
     //================================ Twitter-End ========================================
 
 

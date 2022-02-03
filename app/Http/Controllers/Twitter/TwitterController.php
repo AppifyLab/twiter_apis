@@ -163,6 +163,9 @@ class TwitterController extends Controller
         $data = $request->all();
         return $this->twitterService->getAllTwitterPostList($data);
     }
+    public function getTwitterUser(){
+        return  $this->twitterService->getTwitterUser();
+    }
 
     
     //================================ Twitter-End ========================================

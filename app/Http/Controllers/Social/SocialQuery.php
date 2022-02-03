@@ -11,16 +11,8 @@ class SocialQuery
     public function singleTwitterUser(){
         return Category::first();
     }
-    public function getUser(){
-
-        return Category::first();
-    }
     public function updateUser($token,$id){
         return User::where('id', $id)->update(['fb_token'=>$token,'is_connected'=>1]);
-    }
-    public function updateUserFirstCall(){
-        $d = $this->getUser();
-        return Category::where('id',$d['id'])->update(['is_first_call_done'=>1]);
     }
     public function updateTwitesStatus($ids,$status){
         return Twitter::whereIn('id',$ids)->where('is_published','!=','Completed')->update(['is_published'=>$status]);

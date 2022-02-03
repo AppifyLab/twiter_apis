@@ -15,13 +15,12 @@ Route::prefix('social')->group(function () {
     Route::get('/getFbPage',  [SocialController::class, 'getFbPage']);
     Route::get('/instagramAccountId',  [SocialController::class, 'instagramAccountId']);
     Route::get('/instagramAccountDetail',  [SocialController::class, 'instagramAccountDetail']);
-    Route::get('/instagramPublishPhoto',  [SocialController::class, 'instagramPublishPhoto']);
     Route::get('/fbinfo',  [SocialController::class, 'fbinfo']);
 
 
     Route::get('/featchTweetes',  [SocialController::class, 'featchTweetes']);
     Route::get('/postInstagramForFirstTime',  [SocialController::class, 'postInstagramForFirstTimeActivate']);
-    Route::get('/getUser',  [SocialController::class, 'getUser']);
+    
     
 
 });

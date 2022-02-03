@@ -141,7 +141,7 @@ export default {
 		this.paginateDataInfo(1)
 	},
     async getUser(){
-         const res = await this.callApi('get', `/social/getUser`)
+         const res = await this.callApi('get', `/twitter/geTwitterUser`)
 			if(res.status==200){
 				this.user = res.data
 			}

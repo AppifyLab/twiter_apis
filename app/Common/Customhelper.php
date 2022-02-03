@@ -21,8 +21,9 @@ class Customhelper
             $white = imagecolorallocate($img, 255, 255, 255);
             $txt_input =$text;
             $txt = wordwrap($txt_input, 50, "\n", TRUE);
-            $font = public_path('/font/Roboto-Regular.ttf'); 
-            $font_size = 35;
+            // $font = public_path('/font/Roboto-Regular.ttf'); 
+            $font1 = public_path('/font/Roboto-Bold.ttf'); 
+            $font_size = 30;
             $angle = 0;
             $text_color = imagecolorallocate($img, 0xFF, 0xFF, 0xFF);
             // THE IMAGE SIZE
@@ -42,7 +43,10 @@ class Customhelper
                 $lines=$lines-1;
                 $y = $y+$i*30;
                 $i++;
-                imagettftext($img, $font_size, $angle, $x, $y, $text_color, $font, $text);
+                $black = imagecolorallocate($img,0,0,0);
+               
+                imagettftext($img, $font_size, 0, $x+5, $y+5, $black, $font1, $text);
+                imagettftext($img, $font_size, $angle, $x, $y, $text_color, $font1, $text);
                 // break;
             }
             $save=public_path('/img/converted.jpeg'); 
@@ -178,10 +182,12 @@ class Customhelper
             $limit = 25;
             $client2 = new \GuzzleHttp\Client();
             $url = 'https://api.twitter.com/2/users/'.$user->twitter_user_id.'/tweets?tweet.fields=public_metrics,entities,attachments,created_at&max_results='. $limit.'&start_time='.$start_time.'&end_time='.$end_time;
+            
+            $bearer_token = env('TWITTER_TOKEN');
             $request2 = (string) $client2->get($url,
             ['headers' => 
                 [
-                    'Authorization' => "Bearer AAAAAAAAAAAAAAAAAAAAAOWNYgEAAAAAD1NQJpQfL98Al2lJAYWojnmeOJY%3D9tOPIa1RUfdwVOfrEqSUw0Hmr9v6RWxyES06AcwAY3dXvkUdM6"
+                    'Authorization' => "Bearer $bearer_token"
                 ]
             ]
             )->getBody();

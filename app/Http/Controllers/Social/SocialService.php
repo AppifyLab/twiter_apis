@@ -28,16 +28,6 @@ class SocialService
         return $this->socialQuery->updateTwitesStatus($ids,$status);
     }
     
-    
-    public function getUser(){
-        return $this->socialQuery->getUser();
-    }
-    public function updateUserFirstCall(){
-        return $this->socialQuery->updateUserFirstCall();
-    }
-    
-    
-    
      public function updateTwiterPost($id){
         return $this->socialQuery->updateTwiterPost($id);
     }

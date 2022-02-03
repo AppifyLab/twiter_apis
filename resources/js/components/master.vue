@@ -11,7 +11,7 @@
 <script>
 // import login from './components/auth/login.vue';
 import login from './auth/login.vue'
-import app from './app.vue'
+import app from './navBar.vue'
 import register from './auth/register'
 export default {
     components: { login, app,register},
