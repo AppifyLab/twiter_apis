@@ -22,7 +22,7 @@ class Customhelper
             $txt_input =$text;
             $txt = wordwrap($txt_input, 50, "\n", TRUE);
             // $font = public_path('/font/Roboto-Regular.ttf'); 
-            $font1 = public_path('/font/Roboto-Bold.ttf'); 
+            $font = public_path('/font/Roboto-Bold.ttf'); 
             $font_size = 30;
             $angle = 0;
             $text_color = imagecolorallocate($img, 0xFF, 0xFF, 0xFF);
@@ -45,8 +45,8 @@ class Customhelper
                 $i++;
                 $black = imagecolorallocate($img,0,0,0);
                
-                imagettftext($img, $font_size, 0, $x+5, $y+5, $black, $font1, $text);
-                imagettftext($img, $font_size, $angle, $x, $y, $text_color, $font1, $text);
+                imagettftext($img, $font_size, 0, $x+5, $y+5, $black, $font, $text);
+                imagettftext($img, $font_size, $angle, $x, $y, $text_color, $font, $text);
                 // break;
             }
             $save=public_path('/img/converted.jpeg'); 
