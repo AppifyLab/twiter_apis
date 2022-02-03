@@ -90,13 +90,7 @@ class SocialController extends Controller
    
     public function instagramAccountId($pageId ,$catId, $token){
 
-        // $instagramAccountEndpoint = "https://graph.facebook.com/v5.0/448371488651847";
         $instagramAccountEndpoint = "https://graph.facebook.com/v5.0/".$pageId;
-        // endpoint params
-        // $igParams = array(
-        //     'fields' => 'instagram_business_account',
-        //     'access_token' => 'EAAIwvcvN4CIBAPPhBZBwAq8b2njeZBM5T5cmf9wx5nDfdfxZCHm0ZAL7UST4fgg3c8DZAvuZA8m0XMUIRjUcveIvltk01T1TMq0bxi5ejbsyjE6omP4u2uPemtwXfzwkG9Jh2g2QZAuoSA38LVRqxlh8ZCGiwCZAe1bkbQISMhHDpZC7aDEbms3Xsk'
-        // );
         $igParams = array(
             'fields' => 'instagram_business_account',
             'access_token' => $token
@@ -122,9 +116,6 @@ class SocialController extends Controller
             $inista_id =$response->instagram_business_account->id;
         }
         return $this->instagramAccountDetail($pageId,$inista_id,$token);
-
-        
-
     }
     public function instagramAccountDetail(){
         $fb = new Facebook();
@@ -136,8 +127,6 @@ class SocialController extends Controller
             $token
           )->getGraphUser();
         return $response;
-       
-
         
     }
   

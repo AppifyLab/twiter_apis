@@ -167,16 +167,11 @@ class Customhelper
     
 
     public function getAllTweets(){
-        \Log::info("getAllTweets");
         $all_twetter_users =  Category::select('id','twitter_user_id','last_updatetime','user_id')->get();
-        \Log::info(['s'=>$all_twetter_users]);
         foreach($all_twetter_users as $key => $user ){
             $tdate = Carbon::now();
             $end_time =$tdate->format('Y-m-d\TH:i:s\Z');
             $start_time = $user['last_updatetime'];
-
-            \Log::info(['st'=>$start_time,'end'=>$end_time]);
-           
             Category::select('id',$user['id'])->update(['last_updatetime'=>$end_time]);
            
             $limit = 25;
@@ -201,11 +196,7 @@ class Customhelper
                     return false;
                 }
             }
-            \Log::info(['all'=>$alldata]);
-
-           
             $data = $alldata->data;
-            // \Log::info(['all'=>$alldata]);
             $this->insertTweetIntoTheDatabase($data,$user);
             
         }

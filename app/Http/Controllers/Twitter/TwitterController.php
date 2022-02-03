@@ -59,13 +59,14 @@ class TwitterController extends Controller
     public function featchTweetes($single_twitter_users){
         try {
             $limit = 100;
+            $bearer_token = env('TWITTER_TOKEN');
             $user_name = $single_twitter_users->username;
             $user_id= $single_twitter_users->user_id;
             $client2 = new \GuzzleHttp\Client();
             $request1 = (string) $client2->get('https://api.twitter.com/2/users/by/username/'.$user_name,
             ['headers' => 
                 [
-                    'Authorization' => "Bearer AAAAAAAAAAAAAAAAAAAAAOWNYgEAAAAAD1NQJpQfL98Al2lJAYWojnmeOJY%3D9tOPIa1RUfdwVOfrEqSUw0Hmr9v6RWxyES06AcwAY3dXvkUdM6"
+                    'Authorization' => "Bearer $bearer_token"
                 ]
             ]
             )->getBody();
@@ -80,7 +81,7 @@ class TwitterController extends Controller
             $request2 = (string) $client2->get($url,
             ['headers' => 
                 [
-                    'Authorization' => "Bearer AAAAAAAAAAAAAAAAAAAAAOWNYgEAAAAAD1NQJpQfL98Al2lJAYWojnmeOJY%3D9tOPIa1RUfdwVOfrEqSUw0Hmr9v6RWxyES06AcwAY3dXvkUdM6"
+                    'Authorization' => "Bearer $bearer_token"
                 ]
             ]
             )->getBody();
@@ -100,26 +101,7 @@ class TwitterController extends Controller
             ], 401);
         }
     }
-    public  function sortArrayByName($inputArr) {
-
-        $n = sizeof($inputArr);
-        for ($i = 1; $i < $n; $i++) {
-            // Choosing the first element in our unsorted subarray
-            $current = $inputArr[$i];
-            $like = $inputArr[$i]['like'];
-            // return 1;
-            // The last element of our sorted subarray
-            $j = $i-1;
-
-            while (($j > -1) && isset($inputArr[$j]['like']) && ($like > $inputArr[$j]['like'])) {
-                $inputArr[$j+1] = $inputArr[$j];
-                $j--;
-            }
-            $inputArr[$j+1] = $current;
-        }
-        return $inputArr;
-        
-    }
+  
     public function editTwitterUser(Request $request){
         $data = $request->all();
         $id = $data['cat_id'] ?? 0;

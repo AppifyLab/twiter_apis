@@ -12,10 +12,4 @@ class Category extends Model
     protected $fillable = [
         'username','user_id','twitter_user_id'
     ];
-
-    protected $hidden = ['pivot'];
-    // public function infoCategories()
-    // {
-    //     return $this->belongsToMany(Information::class, 'challenge_categories')->withTimestamps();
-    // }
 }

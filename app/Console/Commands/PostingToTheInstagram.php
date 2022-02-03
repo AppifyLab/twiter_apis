@@ -6,9 +6,6 @@ use App\Models\User;
 use App\Models\Twitter;
 use App\Common\Customhelper;
 
-use App\Jobs\ProcessPodcast;
-
-
 class PostingToTheInstagram extends Command
 {
     /**
