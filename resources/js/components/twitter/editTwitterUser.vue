@@ -1,7 +1,7 @@
 <template>
     <span>
 
-        <Button @click="editModalfunc" size="small" type="primary">Edit</Button>
+        <Button @click="editModalFunc" size="small" type="primary">Edit</Button>
 
 		<Modal v-model="editModal" draggable  class-name="vertical-center-modal" scrollable title="Edit Category">
 			<div class="_login_form">
@@ -16,7 +16,7 @@
 				</Form>
 			</div>
 			 <div slot="footer">
-				<Button @click="editCategory" :loading="isLoading" :disabled="isLoading" icon="md-add" type="primary" >{{ isLoading ? 'Please wait . . .' : 'Edit Twitter Account'}}</Button>
+				<Button @click="editTwitterUser" :loading="isLoading" :disabled="isLoading" icon="md-add" type="primary" >{{ isLoading ? 'Please wait . . .' : 'Edit Twitter Account'}}</Button>
 				<Button type="error" icon ="md-close" @click="editModal = false">Cancel</Button>
 			</div>
 		</Modal>
@@ -25,7 +25,7 @@
 
 <script>
 export default {
-	props:['category'],
+	props:['tweet'],
 	data(){
 		return{
 			editModal: false,
@@ -44,7 +44,7 @@ export default {
 	},
 
 	methods:{
-		async editCategory() {
+		async editTwitterUser() {
 
 			this.clearDataError();
 
@@ -58,12 +58,12 @@ export default {
 
 			this.isLoading = true;
 
-			const res = await this.callApi('post','/category/editCategory', this.form)
+			const res = await this.callApi('post','/twitter/editTwitterUser', this.form)
 
 			if(res.status==200 || res.status==201){
 				this.editModal=false
 				this.s("Twitter user  updated successfully!");
-				this.category.username = this.form.username;
+				this.tweet.username = this.form.username;
             }
 			    this.isLoading = false;
 		},
@@ -77,9 +77,9 @@ export default {
 				username:''
 			}
 		},
-		 editModalfunc(){
-			this.form.cat_id = this.category.id;
-			this.form.username = this.category.username;
+		 editModalFunc(){
+			this.form.cat_id = this.tweet.id;
+			this.form.username = this.tweet.username;
 			this.editModal =true;
 		 },
 

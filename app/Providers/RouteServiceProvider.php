@@ -42,10 +42,10 @@ class RouteServiceProvider extends ServiceProvider
             $allModuleFiles = glob($path);
 
             foreach ($allModuleFiles as $m) {
-                if(file_exists("$m/api.php")){
+                if(file_exists("$m/web.php")){
                     Route::middleware('web')
                         ->namespace($this->namespace)
-                        ->group("$m/api.php");
+                        ->group("$m/web.php");
                 }
 
             }

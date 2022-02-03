@@ -20,7 +20,7 @@
 
 							</div>
 					
-							<addCategory v-if="!twitterData.data || twitterData.data.length<=0" :category="twitterData"/>
+							<addTwitterUser v-if="!twitterData.data || twitterData.data.length<=0" :tweet="twitterData"/>
 						
 
 						</div>
@@ -32,9 +32,9 @@
 									<template slot-scope="{row, index }" slot="action">
                                         <p>
 											<!--create-modal-start-->
-											<editCategory :category="row"/>
+											<editTwitterUser :tweet="row"/>
 											<!--create-modal-end-->
-										    <Button type="error" size="small" @click="deleteCategory(row, index)">Delete</Button>
+										    <Button type="error" size="small" @click="deleteTwitterUser(row, index)">Delete</Button>
                                         </p>
 									</template>
 							</Table>
@@ -53,14 +53,14 @@
 <script>
 
 import _ from 'lodash';
-import addCategory from '../../../../Category/Vue/js/components/category/addCategory'
-import editCategory from '../../../../Category/Vue/js/components/category/editCategory'
+import addTwitterUser from '../components/twitter/addTwitterUser.vue'
+import editTwitterUser from '../components/twitter/editTwitterUser.vue'
 
 export default {
 
 	components: {
-		addCategory,
-		editCategory
+		addTwitterUser,
+		editTwitterUser
 	},
 	data () {
 		return {
@@ -109,7 +109,7 @@ export default {
 
 	methods: {
 	async alltwitterData(){
-		const res = await this.callApi('get', `/category/getAlltwitterData?page=${this.page}&perPage=${this.perPage}&str=${this.str}`)
+		const res = await this.callApi('get', `/twitter/getAlltwitterData?page=${this.page}&perPage=${this.perPage}&str=${this.str}`)
 			if(res.status==200){
 				this.twitterData = res.data;
 			}
@@ -129,7 +129,7 @@ export default {
 		this.alltwitterData()
     },
 
-    deleteCategory(cat, i){
+    deleteTwitterUser(cat, i){
 	this.$Modal.confirm({
           title: 'Message',
           content: '<p>Are you sure to delete this Twitter account ?</p>',
@@ -137,7 +137,7 @@ export default {
                     let obj ={
 						cat_id: cat.id
 					}
-				const res = await this.callApi('post',`/category/deleteCategory/`, obj)
+				const res = await this.callApi('post',`/twitter/deleteTwitterUser/`, obj)
 
 				if(res.status == 200){
 					this.s('Twitter account deleted successfully !!')

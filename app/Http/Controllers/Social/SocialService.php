@@ -14,9 +14,7 @@ class SocialService
     public function singleTwitterUser(){
         return $this->socialQuery->singleTwitterUser();
     }
-    public function getTodaysPost($data,$start,$end){
-        return $this->socialQuery->getTodaysPost($data,$start,$end);
-    }
+ 
     public function postInstagramForFirstTimeActivate($id){
 
         return $this->socialQuery->postInstagramForFirstTimeActivate($id);

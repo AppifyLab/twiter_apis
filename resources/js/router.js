@@ -2,23 +2,24 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
-import index from './components/index'
-import register from './components/register'
+import register from './components/auth/register'
+import twitterUsers from './pages/twitter_users'
+import edit from './pages/edit.vue'
+import twitter from './pages/twitter.vue'
 
-import categories from '../../app/Http/Controllers/Category/Vue/js/router'
-
-
+// import categories from '../../app/Http/Controllers/Category/Vue/js/router'
  const mainRoutes = [
-    // { path: '/', component: index, name: 'index'},
     { path: '/register', component: register, name: 'register'},
+    {path : '/twitter_users', component: twitterUsers, name: 'twitter_users'},
+    {path : '/twitter', component: twitter, name: 'twitter'},
+    {path : '/profile', component: edit, name: 'edit'},
+    { path: '/', component: twitter, name: 'twitter'},
     
 ]
 
-// bring in all the modules routes
 var routes = []
 routes = routes.concat(
     mainRoutes,
-    categories,
 )
 
 
@@ -27,3 +28,8 @@ export default new VueRouter({
 	mode: 'history',
 	routes,
 })
+
+
+
+
+

@@ -26,13 +26,6 @@ class SocialQuery
         return Twitter::whereIn('id',$ids)->where('is_published','!=','Completed')->update(['is_published'=>$status]);
     }
     
-    
-    
-    
-    public function getTodaysPost($data,$start,$end){
-
-        return Twitter::where('is_published','Pending')->whereDate('create_time','>=', $data)->limit(25)->get();
-    }
     public function postInstagramForFirstTimeActivate($id){
         return   User::where('id',$id)->update(['is_ins_scheduled'=>1]);
 

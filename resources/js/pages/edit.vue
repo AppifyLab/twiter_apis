@@ -32,20 +32,7 @@
 
                             <div class="_advertise_step_form">
                                 <div class="row">
-                                    <div class="col-12 col-md-6 col-lg-6">
-                                        <div class="_1input_group">
-                                            <p class="_1label">First Name</p>
-                                            <Input v-model="userData.first_name" placeholder="First Name" value="Marian" />
-                                            <p v-if="userDataError.first_name" class="_inpt1_eror_p">{{userDataError.first_name}}</p>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-6 col-lg-6">
-                                        <div class="_1input_group">
-                                            <p class="_1label">Last Name</p>
-                                            <Input v-model="userData.last_name" placeholder="Last Name" value="Alex" />
-                                            <p v-if="userDataError.last_name" class="_inpt1_eror_p">{{userDataError.last_name}}</p>
-                                        </div>
-                                    </div>
+                                 
                                     <div class="col-12 col-md-6 col-lg-6">
                                         <div class="_1input_group">
                                             <p class="_1label">Email</p>
@@ -187,19 +174,13 @@ export default {
           uploadType:''
       },
       userData:{
-          first_name:'',
-          last_name:'',
           email:'',
           username:'',
-          gender:'',
       },
       
       userDataError:{
-          first_name:'',
-          last_name:'',
           email:'',
           username:'',
-          gender:'',
       },
       
       form:{
@@ -236,14 +217,6 @@ export default {
         
         let flag = 1
         
-        if(!this.userData.first_name  || this.userData.first_name.trim()=='' || this.userData.first_name==null){
-            this.userDataError.first_name ='First name is required!'
-            flag = 0
-        }
-        if(!this.userData.last_name  || this.userData.last_name.trim()=='' || this.userData.last_name==null){
-             this.userDataError.last_name ='Last name is required!'
-            flag = 0
-        }
         if(!this.userData.email  || this.userData.email.trim()=='' || this.userData.email==null){
             this.userDataError.email ='Email is required!'
             flag = 0
@@ -271,14 +244,11 @@ export default {
         let obj =this.userData
         obj.id =this.$store.state.authUser.id
         
-        const res = await this.callApi('post','/category/editAdminUser', obj)
+        const res = await this.callApi('post','/auth/editAdminUser', obj)
         if(res.status==200){
             this.s("Profile updated successfully")
-            this.$store.state.authUser.first_name =this.userData.first_name
-            this.$store.state.authUser.last_name =this.userData.last_name
             this.$store.state.authUser.email =this.userData.email
             this.$store.state.authUser.username =this.userData.username
-            this.$store.state.authUser.gender =this.userData.gender
             
             
         }
@@ -363,7 +333,7 @@ export default {
       this.isLoading = true;
       let obj =this.form;
       obj.id =this.$store.state.authUser.id
-      const res = await this.callApi("post","/category/editAdminPassword",obj);
+      const res = await this.callApi("post","/auth/editAdminPassword",obj);
       if (res.status == 200) {
         this.s("Password changed successfully !");
         // console.log(res.data)

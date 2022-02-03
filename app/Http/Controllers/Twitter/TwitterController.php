@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Category;
+namespace App\Http\Controllers\Twitter;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -9,15 +9,15 @@ use App\Jobs\FetchingPost;
 use Carbon\Carbon;
 use App\Common\Customhelper;
 use App\Http\Controllers\Social\SocialController;
-class CategoryController extends Controller
+class TwitterController extends Controller
 {
 
-    private $categoryService;
+    private $twitterService;
     private $socialService;
     private $customHelper;
-    public function __construct(CategoryService $categoryService,SocialController $socialService ,Customhelper $customHelper)
+    public function __construct(TwitterService $twitterService,SocialController $socialService ,Customhelper $customHelper)
     {
-        $this->categoryService = $categoryService;
+        $this->twitterService = $twitterService;
         $this->socialService = $socialService;
         $this->customHelper = $customHelper;
     }
@@ -30,24 +30,11 @@ class CategoryController extends Controller
       
         return [$date, $date2];
     }
-    public function editAdminUser(Request $request){
-        $data = $request->all();
-        return $this->categoryService->editAdminUser($data);
-   }
-   public function getstath(Request $request){
-    // $data = $request->all();
-    return $this->categoryService->getstath();
-}
-   
-   
-   public function editAdminPassword(Request $request){
-        $data = $request->all();
-        return $this->categoryService->updatePassword($data);
-    }
+  
    
 
-    //================================ Category-Start ========================================
-    public function addCategory(Request $request){
+    //================================ Twitter-Start ========================================
+    public function addTwitterUser(Request $request){
         $data = $request->all();
 
         $validator = Validator::make($data,[
@@ -63,7 +50,7 @@ class CategoryController extends Controller
             ], 422);
         }
 
-        $single_twitter_users = $this->categoryService->addCategory($data);
+        $single_twitter_users = $this->twitterService->addTwitterUser($data);
           $this->featchTweetes($single_twitter_users);
          return $single_twitter_users;
 
@@ -71,7 +58,7 @@ class CategoryController extends Controller
 
     public function featchTweetes($single_twitter_users){
         try {
-            $limit = 25;
+            $limit = 100;
             $user_name = $single_twitter_users->username;
             $user_id= $single_twitter_users->user_id;
             $client2 = new \GuzzleHttp\Client();
@@ -88,7 +75,7 @@ class CategoryController extends Controller
             $url = 'https://api.twitter.com/2/users/'.$user_data->data->id.'/tweets?tweet.fields=public_metrics,attachments,entities,created_at&max_results='. $limit;
             $tdate = Carbon::now();
             $last_updatetime = $tdate->format('Y-m-d\TH:i:s\Z');
-            $this->categoryService->updateTwites(['id'=>$single_twitter_users['id'],'twitter_user_id'=>$user_data->data->id,'last_updatetime'=>$last_updatetime]);
+            $this->twitterService->updateTwites(['id'=>$single_twitter_users['id'],'twitter_user_id'=>$user_data->data->id,'last_updatetime'=>$last_updatetime]);
 
             $request2 = (string) $client2->get($url,
             ['headers' => 
@@ -133,14 +120,14 @@ class CategoryController extends Controller
         return $inputArr;
         
     }
-    public function editCategory(Request $request){
+    public function editTwitterUser(Request $request){
         $data = $request->all();
         $id = $data['cat_id'] ?? 0;
         $validator = Validator::make($data,[
             'username'   => "required|string|unique:categories,username,$id",
         ],[
-            'username.required' => "Category name is required.",
-            'username.unique' => "Category name must be unique.",
+            'username.required' => "Twitter name is required.",
+            'username.unique' => "Twitter name must be unique.",
         ]);
 
         if($validator->fails()){
@@ -148,16 +135,16 @@ class CategoryController extends Controller
                 'messages' => collect($validator->errors()->all())
             ], 422);
         }
-        return $this->categoryService->editCategory($data);
+        return $this->twitterService->editTwitterUser($data);
     }
 
-    public function deleteCategory(Request $request){
+    public function deleteTwitterUser(Request $request){
         $data = $request->all();
         $validator = Validator::make($data,[
             'cat_id'   => "required|exists:categories,id",
         ],[
-            'cat_id.required' => "Category name is required.",
-            'cat_id.exists' => "Category doesn't exists.",
+            'cat_id.required' => "Twitter name is required.",
+            'cat_id.exists' => "Twitter doesn't exists.",
         ]);
 
         if($validator->fails()){
@@ -165,86 +152,22 @@ class CategoryController extends Controller
                 'messages' => collect($validator->errors()->all())
             ], 422);
         }
-        return $this->categoryService->deleteCategory($data);
+        return $this->twitterService->deleteTwitterUser($data);
     }
 
     public function getAlltwitterData(Request $request){
         $data = $request->all();
-        return $this->categoryService->getAlltwitterData($data);
+        return $this->twitterService->getAlltwitterData($data);
     }
     public function getAllTwitterPostList(Request $request){
         $data = $request->all();
-        return $this->categoryService->getAllTwitterPostList($data);
+        return $this->twitterService->getAllTwitterPostList($data);
     }
 
     
-    //================================ Category-End ========================================
+    //================================ Twitter-End ========================================
 
-
-    //================================ Admin-Start ========================================
-    public function createAdmin(Request $request){
-        $data = $request->all();
-        $validator = Validator::make($data,[
-            'email' => 'required|string|max:199|unique:users,email',
-            'username' => 'required|string|max:199|unique:users,username',
-            'password' => 'required|min:6',
-        ],[
-            'username.unique' =>"User must be unique!",
-            'username.regex' =>"User can not contain blank spaces!",
-            'email.unique' =>"Email must be unique!",
-            'password.required' =>"Password is required!",
-        ]);
-
-        if($validator->fails()){
-            return response()->json([
-                'messages' => collect($validator->errors()->all())
-            ], 422);
-        }
-        return $this->categoryService->createAdmin($data);
-    }
-    public function editAdmin(Request $request){
-        $data = $request->all();
-        $id = $data['uid'];
-        $validator = Validator::make($data,[
-            'uid'   => 'required|exists:users,id',
-            'email' => 'required|string|max:199|unique:users,email,'. $id,
-            'username' => 'required|string|max:199|unique:users,username,'. $id,
-        ],[
-            'username.unique' =>"Author must be unique!",
-            'username.regex' =>"Author can not contain blank spaces!",
-            'email.required' =>"Email is required!",
-        ]);
-
-        if($validator->fails()){
-            return response()->json([
-                'messages' => collect($validator->errors()->all())
-            ], 422);
-        }
-        return $this->categoryService->editAdmin($data);
-    }
-
-    public function getAllAdmins(Request $request){
-        $data = $request->all();
-        return $this->categoryService->getAllAdmins($data);
-    }
-
-    public function deleteAdmin(Request $request){
-        $data = $request->all();
-        $validator = Validator::make($data,[
-            'uid'   => "required|exists:users,id",
-        ],[
-            'uid.required' => "User is required.",
-            'uid.exists' => "User doesn't exists.",
-        ]);
-
-        if($validator->fails()){
-            return response()->json([
-                'messages' => collect($validator->errors()->all())
-            ], 422);
-        }
-        return $this->categoryService->deleteAdmin($data);
-    }
-    //================================ Admin-End ========================================
+  
 
 
 }

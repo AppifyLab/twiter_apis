@@ -99,36 +99,36 @@ class Customhelper
 
 
     public function insertTweetIntoTheDatabase($data,$twetter_user){
-             $array_data = [];
-             \Log::info("hello");
-            foreach($data as $key => $value){
-                if(isset($value) && isset($value->entities) && isset($value->entities->urls[0]) && isset($value->entities->urls[0]->url)){
-                    // $value->text = str_replace( $value->entities->urls[0]->url, '', $value->text);
-                    continue;
-                }
-                if(isset($value) && isset($value->attachments)){
-                    continue;
-                }
-                $like = 0;
-                if($value->public_metrics){
-                   if(isset($value->public_metrics->like_count)){
-                        $like =$value->public_metrics->like_count;
-                    }
-                }
-               
-                array_push($array_data,[
-                    'user_id'=>$twetter_user['user_id'],
-                    'text'=>$value->text,
-                    'twitter_id'=>$value->id,
-                    'like'=>$like,
-                    'create_time'=>$value->created_at
-                ]);   
+        $array_data = [];
+        \Log::info("hello");
+        foreach($data as $key => $value){
+            if(isset($value) && isset($value->entities) && isset($value->entities->urls[0]) && isset($value->entities->urls[0]->url)){
+                // $value->text = str_replace( $value->entities->urls[0]->url, '', $value->text);
+                continue;
             }
+            if(isset($value) && isset($value->attachments)){
+                continue;
+            }
+            $like = 0;
+            if($value->public_metrics){
+                if(isset($value->public_metrics->like_count)){
+                    $like =$value->public_metrics->like_count;
+                }
+            }
+            
+            array_push($array_data,[
+                'user_id'=>$twetter_user['user_id'],
+                'text'=>$value->text,
+                'twitter_id'=>$value->id,
+                'like'=>$like,
+                'create_time'=>$value->created_at
+            ]);   
+        }
 
-            $sorted_array = $this->sortArrayByName($array_data);
+        $sorted_array = $this->sortArrayByName($array_data);
 
-            $this->insetTweet($sorted_array);
-            return 1;
+        $this->insetTweet($sorted_array);
+        return 1;
     }
 
     public  function sortArrayByName($inputArr) {
@@ -151,15 +151,14 @@ class Customhelper
     }
 
     public function insetTweet($array_data){
-            $i =1;
-            foreach($array_data as $key => $value){
-                Twitter::create($value);
-                $i++;
-                if($i>25){
-                     break;
-                }
+        $i =1;
+        foreach($array_data as $key => $value){
+            Twitter::create($value);
+            $i++;
+            if($i>25){
+                    break;
             }
-
+        }
     }
     
 

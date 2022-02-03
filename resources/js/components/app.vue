@@ -6,8 +6,6 @@
         <div class="_navbar_left">
           <div class="_navbar_logo">
             <a href="/" class="_navbar_logo_link">
-              <!-- <img class="_navbar_logo_img" src="/static/img/logo-icon.png" alt="" title=""> -->
-              <!-- <img class="_navbar_logo_img_text" src="/static/img/logo-text.png" alt="" title=""> -->
               <h1>AppifyLab</h1>
             </a>
           </div>
@@ -22,15 +20,7 @@
             </div>
           </div>
 
-          <!-- <div class="_navbar_search">
-            <div class="_navbar_search_main_all">
-              <div class="_navbar_search_main">
-                <Icon type="ios-search-outline" />
-                <input type="text"  placeholder="Search..">
-                <div class="outline"></div>
-              </div>
-            </div>
-          </div> -->
+          
         </div>
 
         <div class="_navbar_right">
@@ -49,11 +39,11 @@
                   <div class="_nav_pro_main">
                     <div class="_nav_pro_top">
                       <div class="_nav_pro_top_pic">
-                        <img class="_nav_pro_top_img" :src="authInfo.profile_pic ? authInfo.profile_pic : '/img/avater.png'" title="" alt="">
+                        <img class="_nav_pro_top_img" src="/img/avater.png" title="" alt="">
                       </div>
 
                       <div class="_nav_pro_top_details">
-                        <p class="_nav_pro_top_name">{{authInfo.first_name}} {{authInfo.first_name}}</p>
+                        <p class="_nav_pro_top_name">{{authInfo.username}}</p>
                         <p class="_nav_pro_top_email">{{authInfo.email}}</p>
                       </div>
                     </div>
@@ -66,34 +56,8 @@
                             <p class="_nav_pro_list_text">My Profile</p>
                           </router-link>
                         </li>
-
-                        <!-- <li>
-                          <a href="">
-                            <Icon type="md-cash" />
-                            <p class="_nav_pro_list_text">My Balance</p>
-                          </a>
-                        </li>
-
-                        <li>
-                          <a href="">
-                            <Icon type="md-mail" />
-                            <p class="_nav_pro_list_text">My Inbox</p>
-                          </a>
-                        </li> -->
                       </ul>
                     </div>
-
-                    <!-- <div class="_nav_pro_list_main _1border_color">
-                      <ul class="_nav_pro_list">
-                        <li>
-                          <a href="">
-                            <Icon type="ios-cog" />
-                            <p class="_nav_pro_list_text">Account Setting</p>
-                          </a>
-                        </li>
-                      </ul>
-                    </div> -->
-
                     <div class="_nav_pro_list_main _1border_color">
                       <ul class="_nav_pro_list">
                         <li>
@@ -132,39 +96,10 @@
       <aside v-if="$route.path != '/login' && $route.path != '/register' && $route.path != '/resetPassword' && $route.path != '/forgetPassword'" :class="[(sidebar? '_left_sidebar _hide_sidebar':'_left_sidebar') , (lightSidebar? '_light_sidebar' : ''), (darkSidebar? '_dark_sidebar' : ''), (mobSidebar? '_mobSidebarOpen':'')]">
         <div class="_left_sidebar_main">
 
-          <!-- <div class="_left_sidebar_top">
-            <div class="_mobile_logo">
-              <a href="" class="_navbar_logo_link">
-                <img src="/static/img/main-logo.png" alt="" title="" class="_navbar_logo_img">
-                <img src="/static/img/header.png" alt="" title="" class="_navbar_logo_img_text">
-              </a>
-            </div>
-
-            <div class="_left_sidebar_top_main">
-              <div class="_left_sidebar_pic">
-                <img class="_left_sidebar_img" src="/static/img/photo.jpg" alt="" title="">
-              </div>
-            </div>
-            <p class="_left_sidebar_pro">Admin</p>
-            <p class="_left_sidebar_name">Hussain shipu</p>
-          </div> -->
 
           <div class="_left_sidebar_menu _1scrollbar">
             <Menu :theme="theme3" :active-name="activeRoute">
               <MenuGroup>
-                <!-- <p class="_group_name"><Icon type="ios-more" /></p> -->
-                <!-- <MenuItem to="/twitter" name="index">
-                    <Icon type="md-home" />
-                    <span class="submenu_text">Home</span>
-                </MenuItem> -->
-                <!-- <MenuItem to="/twitter" name="twitter">
-                    <Icon type="ios-apps" />
-                    <span class="submenu_text">Twitter posts</span>
-                </MenuItem> -->
-                <!-- <MenuItem to="/users" name="users">
-                    <Icon type="ios-contacts" />
-                    <span class="submenu_text">Users</span>
-                </MenuItem> -->
                 <MenuItem to="/twitter_users" name="twitter_users">
                     <Icon type="ios-apps" />
                     <span class="submenu_text">Twitter Users</span>
@@ -177,63 +112,8 @@
              
               </MenuGroup>
 
-              <!-- <MenuGroup title="App">
-                <p class="_group_name"><Icon type="ios-more" /></p>
-                <MenuItem name="6">
-                    <Icon type="ios-basket" />
-                    <span class="submenu_text">Components</span>
-                </MenuItem>
-                <Submenu name="8">
-                  <template slot="title">
-                    <Icon type="md-people" />
-                    <span class="submenu_text">Session</span>
-                  </template>
-                  <MenuItem to="/login" name="8-1"><Icon type="md-exit" /><span class="menu_item_text">Login</span></MenuItem>
-                  <MenuItem to="/register" name="8-2"><Icon type="md-person-add" /><span class="menu_item_text">Register</span></MenuItem>
-                  <MenuItem to="/resetPassword" name="8-3"><Icon type="md-unlock" /><span class="menu_item_text">Reset Password</span></MenuItem>
-                  <MenuItem to="/forgetPassword" name="8-4"><Icon type="md-flag" /><span class="menu_item_text">Forget Password</span></MenuItem>
-
-                </Submenu>
-                <Submenu name="7">
-                  <template slot="title">
-                    <Icon type="md-document" />
-                    <span class="submenu_text">Other Pages</span>
-                  </template>
-                  <MenuItem to="/timeline" name="7-1"><Icon type="ios-timer-outline" /><span class="menu_item_text">Timeline</span></MenuItem>
-                  <MenuItem to="/pricing" name="7-2"><Icon type="md-pricetags" /><span class="menu_item_text">Priceing</span></MenuItem>
-                  <MenuItem to="/emailTemplate" name="7-3"><Icon type="ios-mail" /><span class="menu_item_text">Email Template</span></MenuItem>
-                  <MenuItem to="/invoice" name="7-4"><Icon style="transform: rotate(45deg);" type="md-attach" /><span class="menu_item_text">Invoice</span></MenuItem>
-
-                </Submenu>
-                <MenuItem name="8">
-                  <Icon type="md-radio-button-off" />
-                  <span class="submenu_text">Button</span>
-                </MenuItem>
-                <MenuItem name="9">
-                  <Icon type="md-analytics" />
-                  <span class="submenu_text">Process</span>
-                </MenuItem>
-              </MenuGroup> -->
             </Menu>
           </div>
-
-          <!-- <div class="_left_sidebar_bottom _1border_color">
-            <Menu :theme="theme3" active-name="1">
-                <MenuItem>
-                    <Icon @click="lightSidebarClick" type="ios-sunny" />
-                    <span @click="lightSidebarClick" class="submenu_text">Light</span>
-                </MenuItem>
-                <MenuItem>
-                    <Icon @click="darkModeClick" type="ios-moon" />
-                    <span @click="darkModeClick" class="submenu_text">Dark</span>
-                </MenuItem>
-                <MenuItem to="/login">
-                    <Icon type="md-log-out" />
-                    <span class="submenu_text">Logout</span>
-                </MenuItem>
-            </Menu>
-
-          </div> -->
         </div>
       </aside>
       <!-- Sidebar -->
@@ -248,11 +128,8 @@
 </template>
 
 <script>
-// import Footer from "./components/footer.vue";
 export default {
-  components: {
-    // Footer
-  },
+ 
 
   data(){
     return{

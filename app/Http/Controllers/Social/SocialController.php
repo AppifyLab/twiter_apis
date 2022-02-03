@@ -125,23 +125,14 @@ class SocialController extends Controller
 
     }
     public function instagramAccountDetail(){
-        // public function instagramAccountDetail($pageId,$inista_id,$token){
-        // return [$pageId,$inista_id,$token];
         $fb = new Facebook();
         $token = 'EAAIwvcvN4CIBAPZCAirq0MnOQCjx5Bw9zo6OZAeZBdQnZAN8W1XG7aFb02HThTfM44uuV494jqxcS2r6RZALFUbvjk8ZCJIAiFzHuKZBRHziyIvhBUXLc0cn3VZAiY029ETJrqRr5zNaUKmNlqHjj5dMeOv9HVzovGFBMKIHjfP2Uy2TPjOCZAzYk';
         $params = "username,id,media_count,biography,website";
-
-        // return [$pageId,$inista_id,$token];
-       
-        // $params = "username,id,followed_by_count,profile_pic,media_count,biography,website";
-
         $response = $fb->get(
             "17841403387597803?fields=$params",
             // $inista_id."?fields=$params",
             $token
           )->getGraphUser();
-        //   if(isset($response->id))
-          
         return $response;
        
 
@@ -190,52 +181,18 @@ class SocialController extends Controller
         return $response;
     }
 
-
-
-
-
-    public function getTodaysPost(){
-        $date = date("Y-m-d");
-        $start_time = $date.'T00:00:00Z';
-        $end_time = $date.'T23:59:00Z';
-        $allposts =  $this->socialService->getTodaysPost($date, $start_time , $end_time );
-        foreach ($allposts as $key => $value) {
-            ProcessPodcast::dispatch($value);
-        }
-        return "susscess";
-    }
-    
-
-
-
     public function getUser(){
         return  $this->socialService->getUser();
-        
     }
-
-    public function insertIntoQueueForPostInstagram(){
-        $allposts =  $this->socialService->insertIntoQueueForPostInstagram();
-        $ids = [];
-        foreach ($allposts as $key => $value) {
-            if(isset($value['post'])){
-                ProcessPodcast::dispatch($value['post']);
-                array_push($ids,$value['post']->id);
-            }
-        }
-        $this->socialService->updateTwitesStatus($ids,'Processing');
-          
-        return "susscess";
-    }
-
-
    
     public function postInstagramForFirstTimeActivate(){
         $id = Auth::user()->id;
         return $this->socialService->postInstagramForFirstTimeActivate($id);
     }
+
     public function featchTweetes(){
         try {
-            $limit = 100;
+            $limit = 5;
             $single_twitter_users = $this->socialService->singleTwitterUser();
             return $single_twitter_users;
             if(!$single_twitter_users){
@@ -280,117 +237,6 @@ class SocialController extends Controller
             ], 401);
         }
     }
-
-    public function getTwites(){
-        $date = date("Y-m-d");
-        $start_time = $date.'T00:00:00Z';
-        $end_time = $date.'T23:59:00Z';
-        try {
-            $limit = 100;
-            $single_twitter_users = $this->socialService->singleTwitterUser();
-            if(!$single_twitter_users){
-                return response()->json([
-                    'message' => "Please add a twitter username!",
-                ], 401);
-            }
-            $user_name = $single_twitter_users->username;
-
-            $client2 = new \GuzzleHttp\Client();
-            $request1 = (string) $client2->get('https://api.twitter.com/2/users/by/username/'.$user_name,
-            ['headers' => 
-                [
-                    'Authorization' => "Bearer AAAAAAAAAAAAAAAAAAAAAOWNYgEAAAAAD1NQJpQfL98Al2lJAYWojnmeOJY%3D9tOPIa1RUfdwVOfrEqSUw0Hmr9v6RWxyES06AcwAY3dXvkUdM6"
-                ]
-            ]
-            )->getBody();
-            $user_data =json_decode($request1);
-            
-            $token = 100;
-            $client2 = new \GuzzleHttp\Client();
-            $url = 'https://api.twitter.com/2/users/'.$user_data->data->id.'/tweets?tweet.fields=public_metrics,entities,created_at&max_results='. $limit.'&start_time='.$start_time.'&end_time='.$end_time;
-            // $url = 'https://api.twitter.com/2/users/'.$user_data->data->id.'/tweets?tweet.fields=public_metrics,entities,created_at&max_results='. $limit;
-            $request2 = (string) $client2->get($url,
-            ['headers' => 
-                [
-                    'Authorization' => "Bearer AAAAAAAAAAAAAAAAAAAAAOWNYgEAAAAAD1NQJpQfL98Al2lJAYWojnmeOJY%3D9tOPIa1RUfdwVOfrEqSUw0Hmr9v6RWxyES06AcwAY3dXvkUdM6"
-                ]
-            ]
-            )->getBody();
-            $alldata =json_decode($request2);
-            // return $alldata->meta->result_count;
-            if($alldata->meta->result_count==0) {
-                return response()->json([
-                    'message' => "No result found!",
-                ], 401);
-            }
-
-
-
-            // return $alldata;
-        
-            $data = $alldata->data;
-            FetchingPost::dispatch($data);
-            return "sucess";
-        
-        
-       
-        } catch (\Exception $e) {
-            return $e;
-            return response()->json([
-                'message' => "Invalied twitter username!",
-            ], 401);
-        }
-    }
-    
-
-
-    public function backgroundImage($text){
-        header('Content-type: image/png');
-            $img = imagecreatefromjpeg('/Users/appifylab_01/laravel_project/instagramapi/public/img/nice_back.jpeg');
-            $white = imagecolorallocate($img, 255, 255, 255);
-            $txt_input =$text;
-            
-            // return  sizeof($txt_input);
-            $txt = wordwrap($txt_input, 50, "\n", TRUE);
-            $font = public_path('/font/Roboto-Regular.ttf'); 
-            $font_size = 35;
-            $angle = 0;
-            $text_color = imagecolorallocate($img, 0xFF, 0xFF, 0xFF);
-            // THE IMAGE SIZE
-            $width = imagesx($img);
-            $height = imagesy($img);
-            $splittext = explode ( "\n" , $txt );
-            $lines = count($splittext);
-                  $i = 0;
-            foreach ($splittext as $text) {
-                $text_box = imagettfbbox($font_size, $angle, $font, $txt);
-                $text_width = abs(max($text_box[2], $text_box[4]));
-                $text_height = abs(max($text_box[5], $text_box[7]));
-                // $x = 0;
-                $x = (imagesx($img) - $text_width)/2;
-                $y = ((imagesy($img) + $text_height)/2)-($lines-2)*$text_height-30;
-                // $y = ((imagesy($img) + $text_height)/2);
-                $lines=$lines-1;
-                $y = $y+$i*30;
-                $i++;
-                imagettftext($img, $font_size, $angle, $x, $y, $text_color, $font, $text);
-                // break;
-            }
-            // OUTPUT IMAGE
-
-
-            // header('Content-type: image/jpeg');
-            //       header("Cache-Control: no-store, no-cache");  
-            //       header('Content-Disposition: attachment; filename="inst_back_temp.jpg"');
-                  
-            // imagejpeg($img);
-            $save=public_path('/img/new23.png'); 
-            imagepng($img,$save,0,NULL); 
-            imagedestroy($img);
-            return $save;
-
-          
-}
     public function fbinfo(Request $request){
         $params = "email,first_name,last_name,age_range,gender";
         $fb = new Facebook();

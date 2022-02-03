@@ -9,9 +9,10 @@
 </template>
 
 <script>
-import login from './login.vue';
+// import login from './components/auth/login.vue';
+import login from './auth/login.vue'
 import app from './app.vue'
-import register from './register'
+import register from './auth/register'
 export default {
     components: { login, app,register},
 

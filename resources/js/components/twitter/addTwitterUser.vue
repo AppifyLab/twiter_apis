@@ -4,7 +4,7 @@
 		<div class="_1card_top_right">
 			<ul class="_1card_top_right_list">
 				<li><template>
-					<Button @click="createModalfunc" icon="md-add" type="primary">Add Twitter Account</Button>
+					<Button @click="createModalFunc" icon="md-add" type="primary">Add Twitter Account</Button>
 				</template></li>
 			</ul>
 		</div>
@@ -22,7 +22,7 @@
 				</Form>
 			</div>
 			 <div slot="footer">
-				<Button @click="addCategory" :loading="isLoading" :disabled="isLoading" icon="md-add" type="primary" >{{ isLoading ? 'Please wait . . .' : 'Add twitter account and featch twitits'}}</Button>
+				<Button @click="addTwitterUser" :loading="isLoading" :disabled="isLoading" icon="md-add" type="primary" >{{ isLoading ? 'Please wait . . .' : 'Add twitter account and featch twitits'}}</Button>
 				<Button type="error" icon ="md-close" @click="createModal = false">Cancel</Button>
 			</div>
 		</Modal>
@@ -31,7 +31,7 @@
 
 <script>
 export default {
-	props:['category'],
+	props:['tweet'],
 	data(){
 		return{
 			createModal: false,
@@ -49,7 +49,7 @@ export default {
 	},
 
 	methods:{
-		async addCategory() {
+		async addTwitterUser() {
 
 			this.clearDataError();
 
@@ -63,13 +63,13 @@ export default {
 
 			this.isLoading = true;
 
-			const res = await this.callApi('post','/category/addCategory', this.form)
+			const res = await this.callApi('post','/twitter/addTwitterUser', this.form)
 
 			if(res.status==200 || res.status==201){
 				this.createModal=false
 				this.s("Please visite twitter posts!");
-				this.category.total++
-				this.category.data.unshift(res.data)
+				this.tweet.total++
+				this.tweet.data.unshift(res.data)
 				this.clearData()
 			}
 			this.isLoading = false;
@@ -85,7 +85,7 @@ export default {
 				username:''
 			}
 		},
-		 createModalfunc(){
+		 createModalFunc(){
 			this.clearData();
 			this.createModal =true;
 		 },

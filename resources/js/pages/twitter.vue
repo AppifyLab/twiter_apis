@@ -103,7 +103,7 @@ export default {
 
     },
 	async alltwitterData(){
-		const res = await this.callApi('get', `/category/getAllTwitterPostList?page=${this.page}&perPage=${this.perPage}&str=${this.str}`)
+		const res = await this.callApi('get', `/twitter/getAllTwitterPostList?page=${this.page}&perPage=${this.perPage}&str=${this.str}`)
 			if(res.status==200){
 				this.twitterData = res.data;
 			}
@@ -149,36 +149,7 @@ export default {
 	paginateDataInfo(e){
 	   this.page = e
 		this.alltwitterData()
-    },
-
-    deleteCategory(cat, i){
-	this.$Modal.confirm({
-          title: 'Message',
-          content: '<p>Are you sure to delete this Twitter account ?</p>',
-          onOk: async() => {
-                    let obj ={
-						cat_id: cat.id
-					}
-				const res = await this.callApi('post',`/category/deleteCategory/`, obj)
-
-				if(res.status == 200){
-					this.s('Twitter account deleted successfully !!')
-					this.twitterData.data.splice(i, 1);
-					this.twitterData.total--
-				}
-				else{
-					this.swr()
-				}
-          },
-
-          onCancel: () => {
-
-          }
-      });
-    },
-
-
-
+    }
 
 	},
 
