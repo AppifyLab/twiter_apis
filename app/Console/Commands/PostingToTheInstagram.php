@@ -20,7 +20,7 @@ class PostingToTheInstagram extends Command
      *
      * @var string
      */
-    protected $description = 'Featch twits from twits list and post into the instagram';
+    protected $description = 'Featch tweets from tweets list and post into the instagram';
 
     /**
      * Create a new command instance.
@@ -42,9 +42,8 @@ class PostingToTheInstagram extends Command
     public function handle()
     {
         
-        \Log::info("calling Images");
+             \Log::info("calling Images");
             $allposts =   User::where('is_ins_scheduled',1)->where('counter','<',2)->with('post')->whereHas('post')->get();
-            $ids = [];
             foreach ($allposts as $key => $value) {
                 $this->customHelper->processImageAndUploadInstagram($value);
                 return 1;

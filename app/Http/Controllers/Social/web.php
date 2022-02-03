@@ -11,13 +11,6 @@ Route::prefix('social')->group(function () {
    
     Route::get('/login',  [SocialController::class, 'login']);
     Route::get('/facebookredirect',  [SocialController::class, 'facebookredirect']);
-
-    Route::get('/getFbPage',  [SocialController::class, 'getFbPage']);
-    Route::get('/instagramAccountId',  [SocialController::class, 'instagramAccountId']);
-    Route::get('/instagramAccountDetail',  [SocialController::class, 'instagramAccountDetail']);
-    Route::get('/fbinfo',  [SocialController::class, 'fbinfo']);
-
-
     Route::get('/featchTweetes',  [SocialController::class, 'featchTweetes']);
     Route::get('/postInstagramForFirstTime',  [SocialController::class, 'postInstagramForFirstTimeActivate']);
     

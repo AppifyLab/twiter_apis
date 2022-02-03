@@ -21,18 +21,6 @@ class TwitterController extends Controller
         $this->socialService = $socialService;
         $this->customHelper = $customHelper;
     }
-    public function test(){
-        $tdate = Carbon::now();
-
-        $date = $tdate->format('Y-m-d\TH:i:s\Z');
-        // $date = Carbon::createFromFormat('Y-m-d H:i:s', $request->date)->format('d-m-Y');
-        $date2 =  date('Y-m-d H:i:s', strtotime('-3 minutes'));
-      
-        return [$date, $date2];
-    }
-  
-   
-
     //================================ Twitter-Start ========================================
     public function addTwitterUser(Request $request){
         $data = $request->all();
@@ -58,34 +46,7 @@ class TwitterController extends Controller
 
     public function featchTweetes($single_twitter_users){
         try {
-            $limit = 100;
-            $bearer_token = env('TWITTER_TOKEN');
-            $user_name = $single_twitter_users->username;
-            $user_id= $single_twitter_users->user_id;
-            $client2 = new \GuzzleHttp\Client();
-            $request1 = (string) $client2->get('https://api.twitter.com/2/users/by/username/'.$user_name,
-            ['headers' => 
-                [
-                    'Authorization' => "Bearer $bearer_token"
-                ]
-            ]
-            )->getBody();
-            $user_data =json_decode($request1);
-            $token = 100;
-            $client2 = new \GuzzleHttp\Client();
-            $url = 'https://api.twitter.com/2/users/'.$user_data->data->id.'/tweets?tweet.fields=public_metrics,attachments,entities,created_at&max_results='. $limit;
-            $tdate = Carbon::now();
-            $last_updatetime = $tdate->format('Y-m-d\TH:i:s\Z');
-            $this->twitterService->updateTwites(['id'=>$single_twitter_users['id'],'twitter_user_id'=>$user_data->data->id,'last_updatetime'=>$last_updatetime]);
-
-            $request2 = (string) $client2->get($url,
-            ['headers' => 
-                [
-                    'Authorization' => "Bearer $bearer_token"
-                ]
-            ]
-            )->getBody();
-            $alldata =json_decode($request2);
+            $alldata = $this->$twitterService->getTweetsForInitilization($single_twitter_users,100);
             if($alldata->meta->result_count==0) {
                 return response()->json([
                     'message' => "No result found!",
@@ -95,7 +56,6 @@ class TwitterController extends Controller
             $this->customHelper->insertTweetIntoTheDatabase($data,$single_twitter_users);
             return "sucess";
         } catch (\Exception $e) {
-            return $e;
             return response()->json([
                 'message' => "Invalied twitter username!",
             ], 401);

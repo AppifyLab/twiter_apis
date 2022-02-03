@@ -19,7 +19,7 @@ class FeatchingTweets extends Command
      *
      * @var string
      */
-    protected $description = 'Featching Tweets every five munutes';
+    protected $description = 'Featching Tweets every munutes';
 
     /**
      * Create a new command instance.

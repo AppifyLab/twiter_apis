@@ -175,11 +175,11 @@ class Customhelper
             Category::select('id',$user['id'])->update(['last_updatetime'=>$end_time]);
            
             $limit = 25;
-            $client2 = new \GuzzleHttp\Client();
+            $client = new \GuzzleHttp\Client();
             $url = 'https://api.twitter.com/2/users/'.$user->twitter_user_id.'/tweets?tweet.fields=public_metrics,entities,attachments,created_at&max_results='. $limit.'&start_time='.$start_time.'&end_time='.$end_time;
             
             $bearer_token = env('TWITTER_TOKEN');
-            $request2 = (string) $client2->get($url,
+            $tweets = (string) $client->get($url,
             ['headers' => 
                 [
                     'Authorization' => "Bearer $bearer_token"
@@ -187,7 +187,7 @@ class Customhelper
             ]
             )->getBody();
 
-            $alldata =json_decode($request2);
+            $alldata =json_decode($tweets);
            
 
             if(isset($alldata->meta) && isset($alldata->meta->result_count)){
