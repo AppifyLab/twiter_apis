@@ -17,7 +17,7 @@ class Customhelper
     }
 
     public function processImage($text){
-            $img = imagecreatefromjpeg(public_path('/img/test_png.jpeg'));
+            $img = imagecreatefromjpeg(public_path('/img/love.jpeg'));
             $white = imagecolorallocate($img, 255, 255, 255);
             $txt_input =$text;
             $txt = wordwrap($txt_input, 50, "\n", TRUE);
