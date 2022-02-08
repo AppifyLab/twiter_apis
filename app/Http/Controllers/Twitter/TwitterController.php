@@ -39,7 +39,7 @@ class TwitterController extends Controller
         }
 
         $single_twitter_users = $this->twitterService->addTwitterUser($data);
-        return $this->featchTweetes($single_twitter_users);
+        $this->featchTweetes($single_twitter_users);
          return $single_twitter_users;
 
     }
