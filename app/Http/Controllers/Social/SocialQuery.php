@@ -31,5 +31,10 @@ class SocialQuery
 
         return Twitter::where('id',$id)->update(['is_published'=>'Completed']);
     }
+
+      // new methods
+      public function updateCommonUser($data){
+        return User::where('id', $data['id'])->update($data);
+    }
     
 }

@@ -14,6 +14,16 @@ Route::prefix('social')->group(function () {
     Route::get('/featchTweetes',  [SocialController::class, 'featchTweetes']);
     Route::get('/postInstagramForFirstTime',  [SocialController::class, 'postInstagramForFirstTimeActivate']);
     
+
+      // new methods
+
+      Route::get('/getFbPage',  [SocialController::class, 'getFbPage']);
+      Route::post('/connectBussnessId',  [SocialController::class, 'connectBussnessId']);
+      
+
+
+
+
     
 
 });

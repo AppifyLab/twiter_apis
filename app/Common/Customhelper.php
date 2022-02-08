@@ -202,6 +202,27 @@ class Customhelper
         }
     }
 
+
+    public function instagramAccountId($pageId ,$catId, $token){
+        $instagramAccountEndpoint = "https://graph.facebook.com/v5.0/".$pageId;
+        $igParams = array(
+            'fields' => 'instagram_business_account',
+            'access_token' => $token
+        );
+        $instagramAccountEndpoint .= '?' . http_build_query( $igParams );
+        $ch = curl_init();
+        curl_setopt( $ch, CURLOPT_URL, $instagramAccountEndpoint);
+        curl_setopt( $ch, CURLOPT_SSL_VERIFYHOST, false );
+        curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );
+        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+
+        // make call and get response
+        $response = curl_exec( $ch );
+        curl_close( $ch );
+
+        $response = json_decode($response);
+        return $response;
+    }
    
 
 

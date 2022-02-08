@@ -10,6 +10,7 @@ use App\Models\Twitter;
 use Carbon\Carbon;
 use App\Jobs\ProcessPodcast;
 use App\Jobs\FetchingPost;
+use App\Common\Customhelper;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -17,10 +18,12 @@ class SocialController extends Controller
 {
 
     private $socialService;
+    private $customHelper;
 
-    public function __construct(SocialService $socialService)
+    public function __construct(SocialService $socialService,Customhelper $customHelper)
     {
         $this->socialService = $socialService;
+        $this->customHelper = $customHelper;
     }
 
     public function login(){
@@ -44,15 +47,41 @@ class SocialController extends Controller
         
         $this->socialService->updateUser($user->token,$id);
         return redirect('/twitter');
-        
-        
-       return $this->getFbPage($user->token);
-
     }
   
     public function postInstagramForFirstTimeActivate(){
         $id = Auth::user()->id;
         return $this->socialService->postInstagramForFirstTimeActivate($id);
     }
+
+
+      // new methods
+
+      public function getFbPage(){
+        $token=  Auth::user()->fb_token;
+        $fb = new Facebook();
+        $response = $fb->get('/me/accounts', $token);
+        $pages = $response->getGraphEdge()->asArray();
+        return $pages ;
+    }
+
+    public function connectBussnessId(Request $request){
+
+        $user = Auth::user();
+        if($user->bussness_id){
+            return response()->json([
+                'message' => "You are already connected!",
+            ], 401);
+
+        }
+        $data = $request->all();
+        $instagram =  $this->customHelper->instagramAccountId($data['id'], $data['category_list'][0]['id'],$data['access_token']);
+
+        return $this->socialService->checkAndUpdateInstgramBussnessId($instagram,$user->id);
+
+
+    }
+   
+
 
 }

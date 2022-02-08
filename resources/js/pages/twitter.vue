@@ -17,8 +17,9 @@
 								<div class="_1card_top_search">
                                     
                                     <a v-if="!$store.state.authUser.is_connected" href="/social/login"><Button>Connect</Button></a>
-                                    <Button v-if="twitterData && twitterData.data && twitterData.data.length>0 && !$store.state.authUser.is_ins_scheduled && !isLoading" @click="postInstagramForFirstTime">Schedule instagram post</Button>
+                                    <Button v-if="twitterData && twitterData.data && twitterData.data.length>0 && !$store.state.authUser.is_ins_scheduled && !isLoading && $store.state.authUser.bussness_id" @click="postInstagramForFirstTime">Schedule instagram post</Button>
                                     <Button v-if="isLoading"> Loading..</Button>
+                                    <Button @click="getYourFbPages" v-if="!isLoading && !$store.state.authUser.bussness_id && $store.state.authUser.is_connected"> Connect your facebook page..</Button>
                                     
 								</div>
 
@@ -41,6 +42,26 @@
 				</div>
 			</div>
 		</div>
+			<Modal v-model="fbPagesModal" draggable  class-name="vertical-center-modal" scrollable title="Create twitter account">
+			<div class="_login_form">
+			  <Form>
+					<div class="row">
+						<div class="col-12 col-md-12 col-lg-12" v-if="pages.length">
+							<FormItem >
+								   <Select v-model="pageIndex" style="width:200px">
+										<Option v-for="(item,index) in pages" :value="index" :key="index">{{ item.name }}</Option>
+									</Select>
+
+							</FormItem>
+						</div>
+					</div>
+				</Form>
+			</div>
+			 <div slot="footer">
+				<Button @click="connectBussnessId" :loading="isLoading" :disabled="isLoading" icon="md-add" type="primary" >{{ isLoading ? 'Please wait . . .' : 'Add instagram account and post twitits'}}</Button>
+				<Button type="error" icon ="md-close" @click="fbPagesModal = false">Cancel</Button>
+			</div>
+		</Modal>
 
 	</div>
 </template>
@@ -53,7 +74,8 @@ export default {
 
 	data () {
 		return {
-            // isLoading:false,
+			pageIndex:-1,
+            fbPagesModal:false,
             user:{},
             twitterData:[],
 			// allCounts:'',
@@ -91,6 +113,7 @@ export default {
 			
 
 			],
+			pages:[]
 
 		}
 	},
@@ -142,7 +165,30 @@ export default {
 	paginateDataInfo(e){
 	   this.page = e
 		this.alltwitterData()
-    }
+    },
+	async getYourFbPages(){
+		this.isLoading = true
+		const res = await this.callApi('get','/social/getFbPage')
+		this.isLoading = false
+		if(res.status==200){
+			this.pages = res.data
+			this.fbPagesModal = true
+		}
+		
+	},
+	async connectBussnessId(){
+		console.log(this.pageIndex)
+		if(this.pageIndex==null || this.pageIndex<=-1) return
+		
+		let ob = this.pages[this.pageIndex]
+		const res = await this.callApi('post','/social/connectBussnessId',ob)
+		this.isLoading = false
+		if(res.status==200){
+			this.$store.state.authUser.bussness_id =1
+			this.s("You are successfully connected your instagram account!")
+			this.fbPagesModal = false
+		}
+	}
 
 	},
 

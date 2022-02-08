@@ -31,7 +31,22 @@ class SocialService
      public function updateTwiterPost($id){
         return $this->socialQuery->updateTwiterPost($id);
     }
-    
+
+
+
+    // new methods
+    public function checkAndUpdateInstgramBussnessId($data,$id){
+        if(!isset($data->instagram_business_account)){
+            return response()->json([
+                'message' => "Please connect your page with your instagram account!",
+            ], 401);
+        }
+        $ob = [
+            'id'=>$id,
+            'bussness_id'=>$data->instagram_business_account->id
+        ];
+        return $this->socialQuery->updateCommonUser($ob);
+    }
     
 
 }

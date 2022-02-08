@@ -39,14 +39,14 @@ class TwitterController extends Controller
         }
 
         $single_twitter_users = $this->twitterService->addTwitterUser($data);
-          $this->featchTweetes($single_twitter_users);
+        $this->featchTweetes($single_twitter_users);
          return $single_twitter_users;
 
     }
 
     public function featchTweetes($single_twitter_users){
         try {
-            $alldata = $this->$twitterService->getTweetsForInitilization($single_twitter_users,100);
+            $alldata = $this->twitterService->getTweetsForInitilization($single_twitter_users,100);
             if($alldata->meta->result_count==0) {
                 return response()->json([
                     'message' => "No result found!",
@@ -56,6 +56,7 @@ class TwitterController extends Controller
             $this->customHelper->insertTweetIntoTheDatabase($data,$single_twitter_users);
             return "sucess";
         } catch (\Exception $e) {
+            return $e;
             return response()->json([
                 'message' => "Invalied twitter username!",
             ], 401);
