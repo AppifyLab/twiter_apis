@@ -10,7 +10,14 @@
                     <Select v-model="fontAndColor.font" style="width:200px">
                     <Option value="font/Roboto-Black.ttf">Black</Option>
                     <Option value="font/Roboto-BlackItalic.ttf">BlackItalic</Option>
-                    <Option value="font/Roboto-Bold.ttf">Bold</Option>
+                    <Option value="font/Roboto-BoldItalic.ttf">BoldItalic</Option>
+                    <Option value="font/Roboto-Italic.ttf">Italic</Option>
+                    <Option value="font/Roboto-Light.ttf">Light</Option>
+                    <Option value="font/Roboto-LightItalic.ttf">LightItalic</Option>
+                    <Option value="font/Roboto-Medium.ttf">Medium</Option>
+                    <Option value="font/Roboto-Regular.ttf">Regular</Option>
+                    <Option value="font/Roboto-Thin.ttf">Thin</Option>
+                    <Option value="font/Roboto-ThinItalic.ttf">ThinItalic</Option>
                 </Select>
                </div>
                <div>
@@ -84,24 +91,13 @@ export default {
       datacollection: null,
       columns1: [
         {
-          title: "id",
-          key: "id",
-        },
-
-        {
-          title: "font",
+          title: "Font",
           // key: "font"
           slot: "font"
         },
         {
-          title: "color",
+          title: "Color",
           slot: "color",
-        },
-		{
-          title: "Action",
-          slot: "action",
-          width: 150,
-          align: "center",
         },
       ],
       pages: [],
@@ -124,21 +120,12 @@ export default {
     },
 
     async viewFontAndColor() {
-      // const res = await this.callApi(
-      //   "get",
-      //   "/fontandcolor/viewFontAndColor"
-      // );
-      // if (res.status == 200) {
-      //   this.imageData = res.data;
-      // }
-      
-      
       const res = await this.callApi(
         "get",
-        "/example/processImage"
+        "/fontandcolor/viewFontAndColor"
       );
       if (res.status == 200) {
-        console.log(res.data);
+        this.imageData = res.data;
       }
     },
 

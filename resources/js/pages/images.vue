@@ -77,7 +77,7 @@
               </div>
             </div>
             <div class="_table_responsive">
-              <Table
+              <!-- <Table
                 class=""
                 border
                 :columns="columns1"
@@ -91,9 +91,19 @@
                     >Delete
                   </Button>
                 </template>
-              </Table>
+              </Table> -->
+              <div v-for="(item,index) in imageData" :key="index" class="_table_item">
+                <!-- <p> {{item.image}} </p> -->
+                  <img style="width: 100px" :src="item.image" alt="">
+                  <Button type="error" size="small" @click="remove(item, index)"
+                    >Delete
+                  </Button>
+                  <Button type="primary" size="small" @click="viewImage(item)"
+                    >View
+                  </Button>
+              </div>
             </div>
-            <div class="_pagination _padd_t20">
+            <!-- <div class="_pagination _padd_t20">
               <Page
                 :total="imageData.total"
                 show-sizer
@@ -101,7 +111,7 @@
                 @on-page-size-change="getSizeChange"
                 @on-change="paginateDataInfo"
               />
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -111,7 +121,7 @@
       draggable
       class-name="vertical-center-modal"
       scrollable
-      title="Create twitter account"
+      title="Add Image"
     >
       <div class="_login_form">
         <Form>
@@ -149,6 +159,11 @@
         >
       </div>
     </Modal>
+
+    <Modal
+        v-model="viewImageModal">
+        <img :src="modelImage" alt="">
+    </Modal>
   </div>
 </template>
 
@@ -158,6 +173,8 @@ import _ from "lodash";
 export default {
   data() {
     return {
+      viewImageModal: false,
+      modelImage: "",
       modal1: false,
       image: false,
       crfObj: {
@@ -212,27 +229,29 @@ export default {
       );
 	//   console.log(res.data)
       if (res.status == 201) {
-        this.imageData.data.unshift(res.data);
+        console.log(this.imageData);
+        // this.imageData.data.unshift(res.data);
+        this.imageData.unshift(res.data);
 		// this.imageData.concat([res.data]);
 		this.image = false;
       }
     },
 
-	async remove(row) {
+    viewImage(item){
+      this.modelImage = item.image;
+      this.viewImageModal = true;
+    },
+
+	async remove(row, index) {
       if (confirm("Are you sure you want to DELETE permanently?")) {
         const res = await this.callApi("post", "/images/deleteImageRow", {id:row.id});
         if (res.status == 200) {
-          this.imageData.data.splice(row._index, 1);
-          this.s("Data Deleted.")
+          this.imageData.splice(index, 1);
+          // this.imageData.data.splice(row._index, 1);
+          this.s("Data Deleted.");
         }
       }
     },
-
-
-
-
-
-
 
     isUploadModal(type) {
       this.imgData.uploadType = type;
@@ -260,7 +279,8 @@ export default {
     async allImageData() {
       const res = await this.callApi(
         "get",
-        `/images/showAllImages?page=${this.page}&perPage=${this.perPage}&str=${this.str}`
+        "/images/showAllImages"
+        // `/images/showAllImages?page=${this.page}&perPage=${this.perPage}&str=${this.str}`
       );
       if (res.status == 200) {
         this.imageData = res.data;
@@ -339,5 +359,17 @@ export default {
 <style scoped>
 ._1card_top_search .ivu-input-wrapper {
   width: 130%;
+}
+
+._table_responsive {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+._table_item {
+  padding: 0 10px;
+  margin: 10px 0;
+  display: flex;
+  flex-direction: column;
 }
 </style>

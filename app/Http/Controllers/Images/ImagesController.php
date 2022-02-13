@@ -40,7 +40,11 @@ class ImagesController extends Controller
     }
 
     public function showAllImages(Request $request){
+        // return "Jpi";
+        $id = Auth::user()->id;
+        return ImageUpload::where('user_id', $id)->orderBy('id', 'desc')->get();
         $data = $request->all();
+        // return $this->imagesService->showAllImages($data);
         return $this->imagesService->showAllImages($data);
         // return ImageUpload::all()->where('user_id', $id);
     }

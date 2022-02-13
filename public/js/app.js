@@ -3571,10 +3571,27 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
+      viewImageModal: false,
+      modelImage: "",
       modal1: false,
       image: false,
       crfObj: {
@@ -3629,7 +3646,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 //   console.log(res.data)
                 if (res.status == 201) {
-                  _this.imageData.data.unshift(res.data); // this.imageData.concat([res.data]);
+                  console.log(_this.imageData); // this.imageData.data.unshift(res.data);
+
+                  _this.imageData.unshift(res.data); // this.imageData.concat([res.data]);
 
 
                   _this.image = false;
@@ -3643,7 +3662,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee);
       }))();
     },
-    remove: function remove(row) {
+    viewImage: function viewImage(item) {
+      this.modelImage = item.image;
+      this.viewImageModal = true;
+    },
+    remove: function remove(row, index) {
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
@@ -3666,7 +3689,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 res = _context2.sent;
 
                 if (res.status == 200) {
-                  _this2.imageData.data.splice(row._index, 1);
+                  _this2.imageData.splice(index, 1); // this.imageData.data.splice(row._index, 1);
+
 
                   _this2.s("Data Deleted.");
                 }
@@ -3727,7 +3751,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context4.prev = _context4.next) {
               case 0:
                 _context4.next = 2;
-                return _this4.callApi("get", "/images/showAllImages?page=".concat(_this4.page, "&perPage=").concat(_this4.perPage, "&str=").concat(_this4.str));
+                return _this4.callApi("get", "/images/showAllImages" // `/images/showAllImages?page=${this.page}&perPage=${this.perPage}&str=${this.str}`
+                );
 
               case 2:
                 res = _context4.sent;
@@ -3987,6 +4012,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -4015,20 +4047,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       perPage: 10,
       datacollection: null,
       columns1: [{
-        title: "id",
-        key: "id"
-      }, {
-        title: "font",
+        title: "Font",
         // key: "font"
         slot: "font"
       }, {
-        title: "color",
+        title: "Color",
         slot: "color"
-      }, {
-        title: "Action",
-        slot: "action",
-        width: 150,
-        align: "center"
       }],
       pages: []
     };
@@ -4074,13 +4098,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.next = 2;
-                return _this2.callApi("get", "/example/processImage");
+                return _this2.callApi("get", "/fontandcolor/viewFontAndColor");
 
               case 2:
                 res = _context2.sent;
 
                 if (res.status == 200) {
-                  console.log(res.data);
+                  _this2.imageData = res.data;
                 }
 
               case 4:
@@ -5162,7 +5186,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n._1card_top_search .ivu-input-wrapper[data-v-5e1405be] {\r\n  width: 130%;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n._1card_top_search .ivu-input-wrapper[data-v-5e1405be] {\r\n  width: 130%;\n}\n._table_responsive[data-v-5e1405be] {\r\n  display: flex;\r\n  flex-wrap: wrap;\n}\n._table_item[data-v-5e1405be] {\r\n  padding: 0 10px;\r\n  margin: 10px 0;\r\n  display: flex;\r\n  flex-direction: column;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -94220,69 +94244,46 @@ var render = function () {
               _c(
                 "div",
                 { staticClass: "_table_responsive" },
-                [
-                  _c("Table", {
-                    attrs: {
-                      border: "",
-                      columns: _vm.columns1,
-                      data: _vm.imageData.data,
-                    },
-                    scopedSlots: _vm._u([
-                      {
-                        key: "image",
-                        fn: function (ref) {
-                          var row = ref.row
-                          return [
-                            _c("img", {
-                              staticStyle: { width: "28px" },
-                              attrs: { src: row.image, alt: "" },
-                            }),
-                          ]
+                _vm._l(_vm.imageData, function (item, index) {
+                  return _c(
+                    "div",
+                    { key: index, staticClass: "_table_item" },
+                    [
+                      _c("img", {
+                        staticStyle: { width: "100px" },
+                        attrs: { src: item.image, alt: "" },
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "Button",
+                        {
+                          attrs: { type: "error", size: "small" },
+                          on: {
+                            click: function ($event) {
+                              return _vm.remove(item, index)
+                            },
+                          },
                         },
-                      },
-                      {
-                        key: "action",
-                        fn: function (ref) {
-                          var row = ref.row
-                          return [
-                            _c(
-                              "Button",
-                              {
-                                attrs: { type: "error", size: "small" },
-                                on: {
-                                  click: function ($event) {
-                                    return _vm.remove(row)
-                                  },
-                                },
-                              },
-                              [_vm._v("Delete\n                  ")]
-                            ),
-                          ]
+                        [_vm._v("Delete\n                  ")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "Button",
+                        {
+                          attrs: { type: "primary", size: "small" },
+                          on: {
+                            click: function ($event) {
+                              return _vm.viewImage(item)
+                            },
+                          },
                         },
-                      },
-                    ]),
-                  }),
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "_pagination _padd_t20" },
-                [
-                  _c("Page", {
-                    attrs: {
-                      total: _vm.imageData.total,
-                      "show-sizer": "",
-                      "page-size-opts": _vm.pageOption,
-                    },
-                    on: {
-                      "on-page-size-change": _vm.getSizeChange,
-                      "on-change": _vm.paginateDataInfo,
-                    },
-                  }),
-                ],
-                1
+                        [_vm._v("View\n                  ")]
+                      ),
+                    ],
+                    1
+                  )
+                }),
+                0
               ),
             ]),
           ]),
@@ -94296,7 +94297,7 @@ var render = function () {
             draggable: "",
             "class-name": "vertical-center-modal",
             scrollable: "",
-            title: "Create twitter account",
+            title: "Add Image",
           },
           model: {
             value: _vm.fbPagesModal,
@@ -94398,6 +94399,20 @@ var render = function () {
           ),
         ]
       ),
+      _vm._v(" "),
+      _c(
+        "Modal",
+        {
+          model: {
+            value: _vm.viewImageModal,
+            callback: function ($$v) {
+              _vm.viewImageModal = $$v
+            },
+            expression: "viewImageModal",
+          },
+        },
+        [_c("img", { attrs: { src: _vm.modelImage, alt: "" } })]
+      ),
     ],
     1
   )
@@ -94464,8 +94479,50 @@ var render = function () {
                       _vm._v(" "),
                       _c(
                         "Option",
-                        { attrs: { value: "font/Roboto-Bold.ttf" } },
-                        [_vm._v("Bold")]
+                        { attrs: { value: "font/Roboto-BoldItalic.ttf" } },
+                        [_vm._v("BoldItalic")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "Option",
+                        { attrs: { value: "font/Roboto-Italic.ttf" } },
+                        [_vm._v("Italic")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "Option",
+                        { attrs: { value: "font/Roboto-Light.ttf" } },
+                        [_vm._v("Light")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "Option",
+                        { attrs: { value: "font/Roboto-LightItalic.ttf" } },
+                        [_vm._v("LightItalic")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "Option",
+                        { attrs: { value: "font/Roboto-Medium.ttf" } },
+                        [_vm._v("Medium")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "Option",
+                        { attrs: { value: "font/Roboto-Regular.ttf" } },
+                        [_vm._v("Regular")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "Option",
+                        { attrs: { value: "font/Roboto-Thin.ttf" } },
+                        [_vm._v("Thin")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "Option",
+                        { attrs: { value: "font/Roboto-ThinItalic.ttf" } },
+                        [_vm._v("ThinItalic")]
                       ),
                     ],
                     1
