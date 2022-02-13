@@ -108,7 +108,14 @@
                     <Icon type="ios-apps" />
                     <span class="submenu_text">Twitter posts</span>
                 </MenuItem>
-             
+                <MenuItem to="/images" name="images">
+                    <Icon type="ios-apps" />
+                    <span class="submenu_text">Images</span>
+                </MenuItem>
+                <MenuItem to="/setting" name="setting">
+                    <Icon type="ios-apps" />
+                    <span class="submenu_text">Setting</span>
+                </MenuItem>
              
               </MenuGroup>
 

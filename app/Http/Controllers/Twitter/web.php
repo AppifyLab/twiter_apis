@@ -13,6 +13,4 @@ Route::group(['prefix'=>'twitter','middleware'=>'auth'],function (){
     Route::get('/getAlltwitterData',  [TwitterController::class, 'getAlltwitterData']);
     Route::get('/getAllTwitterPostList',  [TwitterController::class, 'getAllTwitterPostList']);
     Route::get('/geTwitterUser',  [TwitterController::class, 'getTwitterUser']);
-
-
 });

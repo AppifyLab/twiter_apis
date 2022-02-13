@@ -6,6 +6,9 @@ import register from './components/auth/register'
 import twitterUsers from './pages/twitter_users'
 import edit from './pages/edit.vue'
 import twitter from './pages/twitter.vue'
+import images from './pages/images.vue'
+import setting from './pages/setting.vue'
+
 
 // import categories from '../../app/Http/Controllers/Category/Vue/js/router'
  const mainRoutes = [
@@ -14,7 +17,8 @@ import twitter from './pages/twitter.vue'
     {path : '/twitter', component: twitter, name: 'twitter'},
     {path : '/profile', component: edit, name: 'edit'},
     { path: '/', component: twitter, name: 'twitter'},
-    
+    { path: '/images', component: images, name: 'images'},
+    { path: '/setting', component: setting, name: 'setting'},
 ]
 
 var routes = []
