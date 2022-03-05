@@ -39,6 +39,7 @@ class SocialQuery
     }
     public function helloworld($data){
         // return "hello22";
+        \Log::info($data);
         return MyJsons::create(['content'=>json_encode($data)]);
     }
     
