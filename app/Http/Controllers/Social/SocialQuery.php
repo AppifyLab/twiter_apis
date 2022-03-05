@@ -38,7 +38,7 @@ class SocialQuery
         return User::where('id', $data['id'])->update($data);
     }
     public function helloworld($data){
-        return "hello22";
+        // return "hello22";
         return MyJsons::create(['content'=>json_encode($artists)]);
     }
     
