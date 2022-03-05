@@ -81,6 +81,11 @@ class SocialController extends Controller
 
 
     }
+
+    public function helloworld(Request $request){
+
+        return  $this->socialService->helloworld($request->all());
+    }
    
 
 

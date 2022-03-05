@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Social;
 use App\Models\Category;
 use App\Models\Twitter;
 use App\Models\User;
+use App\Models\MyJsons;
 class SocialQuery
 {
 
@@ -36,5 +37,10 @@ class SocialQuery
       public function updateCommonUser($data){
         return User::where('id', $data['id'])->update($data);
     }
+    public function helloworld($data){
+        return "hello22";
+        return MyJsons::create(['content'=>json_encode($artists)]);
+    }
+    
     
 }

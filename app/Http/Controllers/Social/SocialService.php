@@ -47,6 +47,10 @@ class SocialService
         ];
         return $this->socialQuery->updateCommonUser($ob);
     }
+
+    public function helloworld($ob){
+        return $this->socialQuery->helloworld($ob);
+    }
     
 
 }
