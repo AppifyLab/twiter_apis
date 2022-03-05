@@ -28,6 +28,6 @@ Route::prefix('social')->group(function () {
 
 });
 
-Route::post('/helloworld',  [SocialController::class, 'helloworld']);
+Route::post('helloworld',  [SocialController::class, 'helloworld']);
 
 
