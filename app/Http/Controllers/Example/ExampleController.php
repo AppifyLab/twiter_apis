@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Twitter;
 use App\Models\User;
 use App\Models\Category;
+use App\Models\FontAndColor;
 use Carbon\Carbon;
 use App\Models\ImageUpload;
 use Illuminate\Support\Facades\Auth;
@@ -20,16 +21,27 @@ class ExampleController extends Controller
     {
         $this->exampleService = $exampleService;
     }
-    public function processImage($text="hi"){
-        $img = imagecreatefromjpeg(public_path('/img/love.jpeg'));
-        $white = imagecolorallocate($img, 255, 255, 255);
+    public function processImage($text = "Hi"){
+        $id = Auth::user()->id;
+        
+        $image = ImageUpload::where('user_id', $id)->inRandomOrder()->limit(1)->first();
+        $fontAndColor = FontAndColor::where('user_id', $id)->first();
+
+        $resStr = str_replace('rgba(', '', $fontAndColor->color);
+        $rgbWithComa = str_replace(')', '', $resStr);
+        $rgb = explode (",", $rgbWithComa); 
+
+        // return $rgb;
+
+        $img = imagecreatefromjpeg(public_path($image->image));
+        $white = imagecolorallocate($img, $rgb[0], $rgb[1], $rgb[2]);
         $txt_input =$text;
         $txt = wordwrap($txt_input, 50, "\n", TRUE);
         // $font = public_path('/font/Roboto-Regular.ttf'); 
-        $font = public_path('/font/Roboto-Bold.ttf'); 
+        $font = public_path($fontAndColor->font); 
         $font_size = 30;
         $angle = 0;
-        $text_color = imagecolorallocate($img, 0xFF, 0xFF, 0xFF);
+        $text_color = imagecolorallocate($img, $rgb[0], $rgb[1], $rgb[2]);
         // THE IMAGE SIZE
         $width = imagesx($img);
         $height = imagesy($img);
